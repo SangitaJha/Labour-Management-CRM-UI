@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVF Labour Management CRM</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .landing-container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      width: 100%;
+      max-width: 900px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 60px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 15s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .header h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .header p {
+      font-size: 18px;
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      padding: 50px 40px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .feature-card {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+      border-color: #667eea;
+    }
+
+    .feature-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .feature-card h3 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .feature-card p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 15px 40px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .info-section {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 12px;
+      margin-top: 40px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-section h2 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 24px;
+    }
+
+    .info-section ul {
+      list-style: none;
+      color: #666;
+    }
+
+    .info-section ul li {
+      padding: 10px 0;
+      padding-left: 30px;
+      position: relative;
+    }
+
+    .info-section ul li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 32px;
+      }
+
+      .content {
+        padding: 30px 20px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="landing-container">
+    <div class="header">
+      <h1>🏗️ SVF Labour Management CRM</h1>
+      <p>Complete Labour Attendance & Payment Management System</p>
+    </div>
+
+    <div class="content">
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <h3>Worker Management</h3>
+          <p>Track and manage all workers, contractors, and their details efficiently</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Attendance Tracking</h3>
+          <p>Real-time attendance management with multiple entry options</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3>Payment Management</h3>
+          <p>Automated payment calculations and payment history tracking</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Reports & Analytics</h3>
+          <p>Comprehensive reports and insights for better decision making</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🏢</div>
+          <h3>Site Management</h3>
+          <p>Manage multiple project sites and locations from one dashboard</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Responsive Design</h3>
+          <p>Access from any device - desktop, tablet, or mobile</p>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <a href="login.html" class="btn btn-primary">
+          <span>🔐</span>
+          <span>Login to Dashboard</span>
+        </a>
+        <a href="dashboard.html" class="btn btn-secondary">
+          <span>📊</span>
+          <span>View Demo</span>
+        </a>
+      </div>
+
+      <div class="info-section">
+        <h2>System Features</h2>
+        <ul>
+          <li>User authentication with role-based access control</li>
+          <li>Real-time worker attendance marking and tracking</li>
+          <li>Automated payment calculations based on attendance</li>
+          <li>Multi-site and multi-contractor support</li>
+          <li>Advanced filtering and search capabilities</li>
+          <li>Export data to Excel/PDF formats</li>
+          <li>Comprehensive dashboard with analytics</li>
+          <li>Secure API with JWT authentication</li>
+          <li>Responsive design for all devices</li>
+          <li>Easy-to-use interface for non-technical users</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 SVF Labour Management CRM. All rights reserved.</p>
+    </div>
+  </div>
+
+  <script>
+    // Always open the dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>

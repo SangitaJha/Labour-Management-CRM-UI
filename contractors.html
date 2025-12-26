@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Contractors</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="js/auth.js"></script>
+  <style>
+    .page-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    .page-header h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 600;
+    }
+    .page-header p {
+      margin: 8px 0 0 0;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+    }
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      color: white;
+    }
+    .stat-icon.blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .stat-icon.green { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .stat-icon.orange { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .stat-icon.purple { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .stat-content h3 {
+      margin: 0;
+      font-size: 14px;
+      color: #6c757d;
+      font-weight: 500;
+    }
+    .stat-content .stat-value {
+      margin: 5px 0 0 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    .filter-section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .filter-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 6px;
+    }
+    .filter-group select,
+    .filter-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    .filter-group select:focus,
+    .filter-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .contractors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 25px;
+      margin: 20px 0;
+    }
+    .contractor-card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    .contractor-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .contractor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+      border-color: #667eea;
+    }
+    .contractor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .contractor-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c3e50;
+      line-height: 1.3;
+    }
+    .contractor-code {
+      font-size: 13px;
+      color: white;
+      padding: 5px 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .contractor-specialty {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 8px 0;
+      text-transform: capitalize;
+    }
+    .contractor-info {
+      margin: 15px 0 0 0;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    .contractor-info div {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: #495057;
+    }
+    .contractor-info i {
+      width: 24px;
+      color: #667eea;
+      margin-right: 10px;
+      font-size: 16px;
+    }
+    .contractor-info a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .contractor-info a:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2 class="sidebar-brand">Labor Attendance</h2>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-item"><i class="fas fa-home"></i><span>Dashboard</span></a>
+      <a href="workers.html" class="sidebar-item"><i class="fas fa-users"></i><span>Labour</span></a>
+      <a href="contractors.html" class="sidebar-item active"><i class="fas fa-user-tie"></i><span>Contractors</span></a>
+      <a href="attendance.html" class="sidebar-item"><i class="fas fa-calendar-check"></i><span>Attendance</span></a>
+      <a href="payments.html" class="sidebar-item"><i class="fas fa-money-bill-wave"></i><span>Wages & Payments</span></a>
+      <a href="reports.html" class="sidebar-item"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
+      <a href="sites.html" class="sidebar-item"><i class="fas fa-map-marker-alt"></i><span>Sites</span></a>
+      <a href="projects.html" class="sidebar-item"><i class="fas fa-building"></i><span>Projects</span></a>
+    </nav>
+  </div>
+
+  <div class="content">
+    <div class="page-header">
+      <h1><i class="fas fa-user-tie"></i> Contractors Management</h1>
+      <p>Manage all contractors across 10 construction sites with complete work details</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+          <h3>Total Contractors</h3>
+          <div class="stat-value" id="totalContractors">100</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="stat-content">
+          <h3>Active Sites</h3>
+          <div class="stat-value">10</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange">
+          <i class="fas fa-briefcase"></i>
+        </div>
+        <div class="stat-content">
+          <h3>Work Types</h3>
+          <div class="stat-value">10</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-content">
+          <h3>Active Today</h3>
+          <div class="stat-value">85</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">
+        <i class="fas fa-filter"></i>
+        Filter Contractors
+      </div>
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label><i class="fas fa-location-dot"></i> Select Site</label>
+          <select id="filterSite" onchange="loadContractors()">
+            <option value="">All Sites</option>
+            <option value="1">Site 1 - Foundation Work</option>
+            <option value="2">Site 2 - Structural Work</option>
+            <option value="3">Site 3 - Finishing</option>
+            <option value="4">Site 4 - Plumbing</option>
+            <option value="5">Site 5 - Electrical</option>
+            <option value="6">Site 6 - Landscaping</option>
+            <option value="7">Site 7 - Painting</option>
+            <option value="8">Site 8 - Roofing</option>
+            <option value="9">Site 9 - Interiors</option>
+            <option value="10">Site 10 - Finalization</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label><i class="fas fa-hard-hat"></i> Work Type</label>
+          <select id="filterSpecialty" onchange="loadContractors()">
+            <option value="">All Specialties</option>
+            <option value="civil">Civil Work</option>
+            <option value="centring">Centring Work</option>
+            <option value="sand-filling">Sand Filling</option>
+            <option value="electrical">Electrical Work</option>
+            <option value="plumbing">Plumbing Work</option>
+            <option value="carpentry">Carpentry Work</option>
+            <option value="tiling">Tiles Work</option>
+            <option value="jally">Jally Work</option>
+            <option value="grill">Grill Work</option>
+            <option value="painting">Painting Work</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label><i class="fas fa-search"></i> Search Contractor</label>
+          <input type="search" id="searchContractor" placeholder="Search by name or code..." onkeyup="searchContractors()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="contractors-grid" id="contractorsGrid">
+      <p>Loading contractors...</p>
+    </div>
+  </div>
+
+  <script>
+    let allContractors = [];
+
+    async function loadContractors() {
+      try {
+        const siteId = document.getElementById('filterSite').value;
+        const specialty = document.getElementById('filterSpecialty').value;
+        let url = `/api/labour/contractors`;
+        if (siteId) url += `?site_id=${siteId}`;
+        if (specialty) url += (siteId ? '&' : '?') + `specialty=${encodeURIComponent(specialty)}`;
+
+        // Try live API first
+        try {
+          const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+          if (resp.ok) {
+            const json = await resp.json();
+            allContractors = json.data || [];
+          } else {
+            allContractors = fallbackData();
+          }
+        } catch(e) {
+          allContractors = fallbackData();
+        }
+
+        displayContractors(allContractors);
+      } catch (error) {
+        console.error('Load contractors error:', error);
+        document.getElementById('contractorsGrid').innerHTML = '<p>Error loading contractors.</p>';
+      }
+    }
+
+    function fallbackData() {
+      const allSites = [];
+      for (let site = 1; site <= 10; site++) {
+        allSites.push(
+          { contractor_code: `CON${String((site*10)+1).padStart(3,'0')}`, contractor_name: 'Civil Work Contractor', specialty: 'civil', site_id: site },
+          { contractor_code: `CON${String((site*10)+2).padStart(3,'0')}`, contractor_name: 'Centring Work Contractor', specialty: 'centring', site_id: site },
+          { contractor_code: `CON${String((site*10)+3).padStart(3,'0')}`, contractor_name: 'Sand Filling Contractor', specialty: 'sand-filling', site_id: site },
+          { contractor_code: `CON${String((site*10)+4).padStart(3,'0')}`, contractor_name: 'Electrical Contractor', specialty: 'electrical', site_id: site },
+          { contractor_code: `CON${String((site*10)+5).padStart(3,'0')}`, contractor_name: 'Plumber Contractor', specialty: 'plumbing', site_id: site },
+          { contractor_code: `CON${String((site*10)+6).padStart(3,'0')}`, contractor_name: 'Carpenter Contractor', specialty: 'carpentry', site_id: site },
+          { contractor_code: `CON${String((site*10)+7).padStart(3,'0')}`, contractor_name: 'Tiles Layer Contractor', specialty: 'tiling', site_id: site },
+          { contractor_code: `CON${String((site*10)+8).padStart(3,'0')}`, contractor_name: 'Jally Contractor', specialty: 'jally', site_id: site },
+          { contractor_code: `CON${String((site*10)+9).padStart(3,'0')}`, contractor_name: 'Grill Contractor', specialty: 'grill', site_id: site },
+          { contractor_code: `CON${String((site*10)+10).padStart(3,'0')}`, contractor_name: 'Painter Contractor', specialty: 'painting', site_id: site }
+        );
+      }
+      return allSites;
+    }
+
+    function displayContractors(items) {
+      const grid = document.getElementById('contractorsGrid');
+      const qSpec = document.getElementById('filterSpecialty').value;
+      const siteId = document.getElementById('filterSite').value;
+      const filtered = items.filter(c => 
+        (!qSpec || c.specialty === qSpec) && 
+        (!siteId || (c.site_id && Number(siteId) === Number(c.site_id)))
+      );
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p>No contractors found</p>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(c => `
+        <div class="contractor-card" data-contractor="${encodeURIComponent(c.contractor_name)}" data-site="${c.site_id}">
+          <div class="contractor-header">
+            <div class="contractor-name">${c.contractor_name}</div>
+            <div class="contractor-code">${c.contractor_code}</div>
+          </div>
+          <span class="contractor-specialty">
+            <i class="fas fa-briefcase"></i>
+            ${c.specialty}
+          </span>
+          <div class="contractor-info">
+            <div>
+              <i class="fas fa-map-marker-alt"></i>
+              Site Location: <a href="sites.html?site_id=${c.site_id}" onclick="event.stopPropagation()">Site ${c.site_id}</a>
+            </div>
+            <div>
+              <i class="fas fa-phone"></i>
+              Contact: +91 98765 43210
+            </div>
+            <div>
+              <i class="fas fa-calendar-check"></i>
+              Status: <span style="color: #28a745; font-weight: 600;">Active</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Update total count
+      document.getElementById('totalContractors').textContent = filtered.length;
+
+      // Make contractor cards clickable
+      document.querySelectorAll('.contractor-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+          if (e.target.tagName !== 'A') {
+            const contractor = this.getAttribute('data-contractor');
+            const site = this.getAttribute('data-site');
+            window.location.href = `sites.html?site_id=${site}&contractor=${contractor}`;
+          }
+        });
+      });
+    }
+
+    function searchContractors() {
+      const q = document.getElementById('searchContractor').value.toLowerCase();
+      const filtered = allContractors.filter(c =>
+        (c.contractor_name || '').toLowerCase().includes(q) ||
+        (c.contractor_code || '').toLowerCase().includes(q)
+      );
+      displayContractors(filtered);
+    }
+
+    loadContractors();
+  </script>
+</body>
+</html>

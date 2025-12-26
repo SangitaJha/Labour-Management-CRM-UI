@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Backend API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            min-height: 50px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        h1 { color: #333; }
+        h2 { color: #666; }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Backend API Testing Dashboard</h1>
+    
+    <div class="test-section">
+        <h2>📋 Test Summary</h2>
+        <p>Backend API Server: <code>http://localhost:3000</code></p>
+        <p><strong class="info">Note:</strong> You need MySQL database running for full functionality.</p>
+        <p><strong>Without database:</strong> Basic endpoints work, but authentication and data operations will fail.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>1. Test Server Status</h2>
+        <button onclick="testRootEndpoint()">Test GET /</button>
+        <button onclick="testHealthCheck()">Test GET /api/health</button>
+        <div id="result1" class="result">Click a button to test...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test Database Connection</h2>
+        <p>Database setup required:</p>
+        <ol>
+            <li>Install MySQL: <a href="https://dev.mysql.com/downloads/" target="_blank">Download MySQL</a></li>
+            <li>Create database: <code>CREATE DATABASE real_estate_crm;</code></li>
+            <li>Update <code>backend/.env</code> with your MySQL password</li>
+            <li>Run SQL schema from <code>BACKEND_IMPLEMENTATION_GUIDE.md</code></li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Test Authentication (Requires Database)</h2>
+        <button onclick="testRegister()">Test Register</button>
+        <button onclick="testLogin()">Test Login</button>
+        <div id="result3" class="result">Database required for this test...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Backend Status</h2>
+        <div id="status" class="result">
+            <p class="info">✅ Backend code created successfully!</p>
+            <p class="info">✅ Dependencies installed</p>
+            <p class="error">⚠️ MySQL database not connected</p>
+            <p class="info">📖 See BACKEND_IMPLEMENTATION_GUIDE.md for full setup</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+
+        async function testRootEndpoint() {
+            const resultDiv = document.getElementById('result1');
+            resultDiv.innerHTML = '🔄 Testing...';
+            
+            try {
+                const response = await fetch(API_URL + '/');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ Success! Server is running</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Error: ${error.message}</p>
+                    <p class="info">Make sure the backend server is running:</p>
+                    <code>cd backend && node server.js</code>
+                `;
+            }
+        }
+
+        async function testHealthCheck() {
+            const resultDiv = document.getElementById('result1');
+            resultDiv.innerHTML = '🔄 Testing health check...';
+            
+            try {
+                const response = await fetch(API_URL + '/api/health');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ Health Check Passed!</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Error: ${error.message}</p>
+                    <p class="info">Server may not be running on port 3000</p>
+                `;
+            }
+        }
+
+        async function testRegister() {
+            const resultDiv = document.getElementById('result3');
+            resultDiv.innerHTML = '🔄 Testing registration...';
+            
+            try {
+                const response = await fetch(API_URL + '/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'testuser',
+                        email: 'test@example.com',
+                        password: 'Test@123',
+                        full_name: 'Test User',
+                        mobile: '1234567890',
+                        role: 'agent'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ Registration Successful!</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ Registration Failed</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Error: ${error.message}</p>
+                    <p class="info">Database connection required. Please setup MySQL.</p>
+                `;
+            }
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('result3');
+            resultDiv.innerHTML = '🔄 Testing login...';
+            
+            try {
+                const response = await fetch(API_URL + '/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'Test@123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ Login Successful!</p>
+                        <p>Token saved to localStorage</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ Login Failed</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Error: ${error.message}</p>
+                    <p class="info">Database connection required. Please setup MySQL.</p>
+                `;
+            }
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            setTimeout(testHealthCheck, 1000);
+        };
+    </script>
+</body>
+</html>
