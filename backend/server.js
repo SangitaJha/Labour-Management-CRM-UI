@@ -21,23 +21,11 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static frontend files (HTML/CSS/JS) from project root
 const frontendDir = path.resolve(__dirname, '..');
 app.use(express.static(frontendDir));
+// Serve assets folder for images and icons
+app.use('/assets', express.static(path.join(__dirname, '../assets')));
 
-// Test database connection (non-blocking)
-db.authenticate()
-  .then(() => {
-    console.log('✅ Database connected successfully');
-    // Auto-sync models if DB is connected
-    const syncDb = require('./sync-db');
-    syncDb().catch(err => console.log('⚠️  Model sync skipped:', err.message));
-    
-    // Seed demo users
-    const seedUsers = require('./seeders/seed-users');
-    seedUsers().catch(err => console.log('⚠️  User seeding skipped:', err.message));
-  })
-  .catch(err => {
-    console.error('❌ Database connection error:', err.message);
-    console.log('💡 Server will run without database. Update credentials in backend/.env to enable APIs.');
-  });
+// DEMO MODE: Skip DB connection and always run server
+console.log('💡 Running in DEMO MODE: Database connection and sync skipped. All features will use sample/demo data.');
 
 // Import Routes
 const authRoutes = require('./routes/auth.routes');
@@ -90,9 +78,16 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Serve main landing page for root path
+
+// Serve login page as default for unauthenticated users
 app.get('/', (req, res) => {
-  res.sendFile(path.join(frontendDir, 'index.html'));
+  // Check for token in cookies or headers (simple demo, real app should verify JWT)
+  const token = req.headers['authorization'] || req.cookies?.token;
+  if (!token) {
+    res.sendFile(path.join(frontendDir, 'login.html'));
+  } else {
+    res.sendFile(path.join(frontendDir, 'index.html'));
+  }
 });
 
 // Catch-all for unmatched routes - serve index or 404

@@ -9,25 +9,50 @@
     .settings-container {
       max-width: 900px;
       margin: 30px auto;
-    }
-
-    .settings-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 30px;
-      border-radius: 12px;
-      color: white;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    .settings-header h2 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    .settings-header p {
-      margin: 10px 0 0;
-      opacity: 0.9;
+    <div class="crm-layout">
+      <aside class="crm-sidebar">
+        <div class="sidebar-logo">
+          <img src="https://img.icons8.com/ios-filled/50/667eea/construction-worker.png" alt="Logo" />
+          <span>SVF CRM</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="index.html"><i class="fas fa-home"></i> Home</a>
+          <a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a>
+          <a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a>
+          <a href="payments.html"><i class="fas fa-rupee-sign"></i> Payments</a>
+          <a href="workers.html"><i class="fas fa-users"></i> Workers</a>
+          <a href="projects.html"><i class="fas fa-building"></i> Projects</a>
+          <a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+          <a href="settings.html" class="active"><i class="fas fa-cog"></i> Settings</a>
+          <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+        </nav>
+      </aside>
+      <main class="crm-main">
+        <header class="crm-header">
+          <div class="header-title">
+            <h1>Settings</h1>
+            <span class="header-desc">Manage your CRM preferences, user roles, and more.</span>
+          </div>
+        </header>
+        <section class="dashboard-content">
+          <div class="settings-grid">
+            <div class="settings-nav">
+              <button>Profile</button>
+              <button>Account</button>
+              <button>Notifications</button>
+              <button>Security</button>
+              <button>Integrations</button>
+            </div>
+            <div class="settings-content">
+              <!-- Settings content here -->
+            </div>
+          </div>
+        </section>
+        <footer class="crm-footer">
+          <p>&copy; 2025 SVF Labour Management CRM. All rights reserved.</p>
+        </footer>
+      </main>
+    </div>
     }
 
     .settings-grid {

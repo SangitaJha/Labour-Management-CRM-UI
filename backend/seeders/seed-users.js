@@ -5,7 +5,7 @@ const demoUsers = [
   {
     name: 'Admin User',
     email: 'admin@labourcrm.com',
-    password: 'admin123',
+    password: 'onrr',
     phone: '+91 9876543210',
     role: 'admin'
   },

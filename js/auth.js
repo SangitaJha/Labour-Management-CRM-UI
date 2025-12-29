@@ -1,8 +1,10 @@
 // Auth Protection & Utilities
-// Use current origin in production; fallback to localhost for dev
-const API_URL = (typeof window !== 'undefined' && window.location && window.location.origin)
-  ? `${window.location.origin}/api`
-  : 'http://localhost:3000/api';
+// Determine API base URL with optional override for static hosting (e.g., GitHub Pages)
+const API_URL = (typeof window !== 'undefined' && window.API_BASE_URL)
+  ? window.API_BASE_URL.replace(/\/$/, '')
+  : ((typeof window !== 'undefined' && window.location && window.location.origin)
+      ? `${window.location.origin}/api`
+      : 'http://localhost:3000/api');
 
 /**
  * Check if user is authenticated

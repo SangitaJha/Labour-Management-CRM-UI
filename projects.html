@@ -5,19 +5,61 @@
 <title>Project / Worksite Tracking</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-<div class="sidebar">
-<h2>Labour CRM</h2>
-<a href="dashboard.html">Dashboard</a>
-<a href="workers.html">Labour / Contractors</a>
-<a href="attendance.html">Attendance</a>
-<a href="payments.html">Wages & Payments</a>
-<a href="projects.html">Projects</a>
-<a href="reports.html">Reports</a>
+
+<div class="crm-layout">
+	<aside class="crm-sidebar">
+		<div class="sidebar-logo">
+			<img src="https://img.icons8.com/ios-filled/50/667eea/construction-worker.png" alt="Logo" />
+			<span>SVF CRM</span>
+		</div>
+		<nav class="sidebar-nav">
+			<a href="index.html"><i class="fas fa-home"></i> Home</a>
+			<a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a>
+			<a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a>
+			<a href="payments.html"><i class="fas fa-rupee-sign"></i> Payments</a>
+			<a href="workers.html"><i class="fas fa-users"></i> Workers</a>
+			<a href="projects.html" class="active"><i class="fas fa-building"></i> Projects</a>
+			<a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+			<a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+		</nav>
+	</aside>
+	<main class="crm-main">
+		<header class="crm-header">
+			<div class="header-title">
+				<h1>Projects & Worksite Tracking</h1>
+				<span class="header-desc">Manage all projects, sites, and labour assignments</span>
+			</div>
+		</header>
+		<section class="dashboard-content">
+			<div class="dashboard-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
+				<div class="dash-card green" tabindex="0" style="background:#e8f5e9;cursor:pointer;">
+					<div class="card-icon"><i class="fas fa-building"></i></div>
+					<div class="card-content"><h3>Total Projects</h3><p class="card-value">5</p></div>
+				</div>
+				<div class="dash-card yellow" tabindex="0" style="background:#fffde7;cursor:pointer;">
+					<div class="card-icon"><i class="fas fa-map-marked"></i></div>
+					<div class="card-content"><h3>Total Vacant Plots</h3><p class="card-value">121</p></div>
+				</div>
+				<div class="dash-card red" tabindex="0" style="background:#ffebee;cursor:pointer;">
+					<div class="card-icon"><i class="fas fa-check-square"></i></div>
+					<div class="card-content"><h3>Total Booked Plots</h3><p class="card-value">16</p></div>
+				</div>
+			</div>
+			<div style="margin-top:32px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.08);padding:32px;">
+				<h2 style="text-align:center;color:#007bff;font-size:1.5rem;margin-bottom:18px;">Assign Labour to Sites</h2>
+				<form style="display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:700px;margin:0 auto;">
+					<div class="form-group"><label>Project Name</label><input type="text" placeholder="Enter project name" required></div>
+					<div class="form-group"><label>Site Location</label><input type="text" placeholder="Enter site location" required></div>
+					<div class="form-group"><label>Assign Labour</label><input type="text" placeholder="Labour name/code" required></div>
+					<div class="form-group"><label>Role</label><select><option>Mason</option><option>Carpenter</option><option>Electrician</option><option>Plumber</option><option>Painter</option><option>Helper</option></select></div>
+					<div class="form-group"><label>Start Date</label><input type="date" required></div>
+					<div class="form-group"><label>End Date</label><input type="date"></div>
+					<div style="grid-column:1/3;text-align:center;margin-top:12px;"><button type="submit" class="btn btn-success">Assign</button></div>
+				</form>
+			</div>
+		</section>
+		<footer class="crm-footer">
+			<p>&copy; 2025 SVF Labour Management CRM. All rights reserved.</p>
+		</footer>
+	</main>
 </div>
-<div class="content">
-<h1>Project / Worksite Tracking</h1>
-<p>Assign labour to sites.</p>
-</div>
-</body>
-</html>

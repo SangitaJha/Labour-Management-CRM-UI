@@ -4,324 +4,134 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SVF Labour Management CRM</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      overflow: hidden;
-    }
-
-    .landing-container {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
-      width: 100%;
-      max-width: 900px;
-      animation: fadeIn 0.5s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 60px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: pulse 15s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-
-    .header h1 {
-      font-size: 42px;
-      margin-bottom: 10px;
-      position: relative;
-      z-index: 1;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .header p {
-      font-size: 18px;
-      opacity: 0.95;
-      position: relative;
-      z-index: 1;
-    }
-
-    .content {
-      padding: 50px 40px;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      margin-bottom: 40px;
-    }
-
-    .feature-card {
-      background: #f8f9fa;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
-      border-color: #667eea;
-    }
-
-    .feature-icon {
-      font-size: 48px;
-      margin-bottom: 15px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .feature-card h3 {
-      color: #333;
-      margin-bottom: 10px;
-      font-size: 20px;
-    }
-
-    .feature-card p {
-      color: #666;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 15px 40px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-    }
-
-    .btn-secondary {
-      background: white;
-      color: #667eea;
-      border: 2px solid #667eea;
-    }
-
-    .btn-secondary:hover {
-      background: #667eea;
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    .info-section {
-      background: #f8f9fa;
-      padding: 30px;
-      border-radius: 12px;
-      margin-top: 40px;
-      border-left: 4px solid #667eea;
-    }
-
-    .info-section h2 {
-      color: #333;
-      margin-bottom: 15px;
-      font-size: 24px;
-    }
-
-    .info-section ul {
-      list-style: none;
-      color: #666;
-    }
-
-    .info-section ul li {
-      padding: 10px 0;
-      padding-left: 30px;
-      position: relative;
-    }
-
-    .info-section ul li:before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      color: #667eea;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 20px;
-      color: #999;
-      font-size: 14px;
-    }
-
-    @media (max-width: 768px) {
-      .header h1 {
-        font-size: 32px;
-      }
-
-      .content {
-        padding: 30px 20px;
-      }
-
-      .features {
-        grid-template-columns: 1fr;
-      }
-
-      .action-buttons {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-        justify-content: center;
-      }
-    }
+    body { background: #f4f7fb; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; }
+    .crm-layout { display: flex; min-height: 100vh; }
+    .crm-sidebar { width: 240px; background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); color: #fff; display: flex; flex-direction: column; align-items: center; padding: 32px 0 0 0; box-shadow: 2px 0 16px #667eea11; }
+    .sidebar-logo { display: flex; align-items: center; gap: 12px; font-size: 1.6rem; font-weight: 800; margin-bottom: 48px; letter-spacing: 1px; }
+    .sidebar-logo img { height: 40px; width: 40px; border-radius: 8px; background: #e0e7ff; object-fit: cover; }
+    .sidebar-nav { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+    .sidebar-nav a { color: #fff; text-decoration: none; font-weight: 600; padding: 14px 32px; font-size: 1.08rem; display: flex; align-items: center; gap: 14px; border-left: 4px solid transparent; transition: background 0.2s, border-color 0.2s; }
+    .sidebar-nav a.active, .sidebar-nav a:hover { background: #fff2; border-left: 4px solid #fff; color: #fff; }
+    .crm-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .crm-header { background: #fff; box-shadow: 0 2px 12px #667eea11; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 72px; position: sticky; top: 0; z-index: 10; }
+    .header-title h1 { font-size: 2rem; font-weight: 900; color: #667eea; margin: 0; letter-spacing: 1px; }
+    .header-desc { font-size: 1.1rem; color: #888; margin-left: 8px; }
+    .header-user { display: flex; align-items: center; gap: 12px; }
+    .dashboard-content { padding: 32px 32px 0 32px; flex: 1; }
+    .hero { background: linear-gradient(120deg, #667eea 0%, #764ba2 100%); color: #fff; text-align: center; padding: 64px 24px 40px 24px; position: relative; border-radius: 18px; box-shadow: 0 2px 12px #667eea22; margin-bottom: 32px; }
+    .logo-hero { display: inline-block; background: #fff; border-radius: 16px; padding: 12px 18px; margin-bottom: 18px; box-shadow: 0 2px 12px #667eea22; }
+    .logo-hero img { height: 48px; width: 48px; border-radius: 8px; object-fit: cover; }
+    .hero h1 { font-size: 2.7rem; font-weight: 900; margin-bottom: 12px; letter-spacing: 1px; text-shadow: 0 2px 12px #0002; }
+    .hero p { font-size: 1.25rem; opacity: 0.97; margin-bottom: 0; }
+    .content { max-width: 1100px; margin: 0 auto; padding: 40px 32px 0 32px; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px; margin-bottom: 36px; }
+    .feature-card { background: #fff; padding: 28px 18px 22px 18px; border-radius: 14px; text-align: center; transition: all 0.3s cubic-bezier(.4,2,.3,1); border: 2px solid #f4f7fb; box-shadow: 0 2px 12px #667eea11; position: relative; }
+    .feature-card:hover { transform: translateY(-7px) scale(1.03); box-shadow: 0 10px 32px #667eea22; border-color: #667eea; z-index: 2; }
+    .feature-icon { font-size: 2.5rem; margin-bottom: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .feature-card h3 { color: #333; margin-bottom: 8px; font-size: 1.15rem; font-weight: 700; }
+    .feature-card p { color: #666; font-size: 0.98rem; line-height: 1.5; }
+    .action-buttons { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
+    .btn { padding: 15px 38px; border: none; border-radius: 8px; font-size: 1.08rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 0.3s cubic-bezier(.4,2,.3,1); display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 2px 8px #667eea22; }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
   </style>
 </head>
 <body>
-  <div class="landing-container">
-    <div class="header">
-      <h1>🏗️ SVF Labour Management CRM</h1>
-      <p>Complete Labour Attendance & Payment Management System</p>
-    </div>
-
-    <div class="content">
-      <div class="features">
-        <div class="feature-card">
-          <div class="feature-icon">👥</div>
-          <h3>Worker Management</h3>
-          <p>Track and manage all workers, contractors, and their details efficiently</p>
+  <div class="crm-layout">
+    <aside class="crm-sidebar">
+      <div class="sidebar-logo"><img src="SVF_ICON.jpeg" alt="SVF Homes Logo" style="height:48px;width:48px;border-radius:10px;background:#e0e7ff;object-fit:cover;margin-right:12px;" /> SVF CRM</div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="#smaterial-section"><i class="fas fa-cubes"></i> Material</a>
+        <a href="contractors.html"><i class="fas fa-user-tie"></i> Contractors</a>
+        <a href="supplier.html"><i class="fas fa-truck"></i> Supplier</a>
+        <a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a>
+        <a href="payments.html"><i class="fas fa-rupee-sign"></i> Payments</a>
+        <a href="projects.html"><i class="fas fa-building"></i> Projects</a>
+        <a href="workers.html"><i class="fas fa-users"></i> Workers</a>
+        <a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+        <a href="sites.html"><i class="fas fa-map-marker-alt"></i> Sites</a>
+        <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+        <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+      </nav>
+    </aside>
+    <main class="crm-main">
+      <header class="crm-header">
+        <div class="header-title"><h1>SVF Labour Management CRM</h1></div>
+        <div class="header-user"><i class="fas fa-user-circle"></i> Welcome</div>
+      </header>
+      <section class="dashboard-content">
+        <div class="hero">
+          <div class="logo-hero"><img src="https://img.icons8.com/ios-filled/50/667eea/construction-worker.png" alt="Logo" /></div>
+          <h1>Welcome to SVF Labour Management CRM</h1>
+          <p>Modern, easy-to-use platform for managing attendance, payments, projects, and more.</p>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">📋</div>
-          <h3>Attendance Tracking</h3>
-          <p>Real-time attendance management with multiple entry options</p>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">💰</div>
-          <h3>Payment Management</h3>
-          <p>Automated payment calculations and payment history tracking</p>
+        <div id="smaterial-section" class="smaterial-section" style="background:linear-gradient(120deg,#f4f7fb 60%,#e0e7ff 100%);border-radius:18px;box-shadow:0 4px 24px #667eea22;padding:40px 28px 32px 28px;margin-bottom:36px;text-align:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-30px;right:-30px;opacity:0.12;font-size:10rem;pointer-events:none;"><i class="fas fa-cubes"></i></div>
+          <h2 style="color:#764ba2;font-size:2rem;font-weight:900;margin-bottom:10px;letter-spacing:1px;">Material</h2>
+          <p style="font-size:1.18rem;color:#333;max-width:700px;margin:0 auto 18px auto;">Easily monitor, track, and analyze all construction materials for your projects. The Material section provides real-time inventory, usage analytics, and procurement status to keep your operations running smoothly.</p>
+          <div style="display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-top:24px;">
+            <div style="background:#fff;border-radius:12px;box-shadow:0 2px 8px #667eea11;padding:24px 18px;min-width:180px;">
+              <div style="font-size:2.2rem;color:#667eea;margin-bottom:8px;"><i class="fas fa-warehouse"></i></div>
+              <div style="font-size:1.1rem;font-weight:700;color:#333;">Current Inventory</div>
+              <div style="font-size:1.4rem;color:#764ba2;font-weight:900;">1,250 units</div>
+            </div>
+            <div style="background:#fff;border-radius:12px;box-shadow:0 2px 8px #667eea11;padding:24px 18px;min-width:180px;">
+              <div style="font-size:2.2rem;color:#667eea;margin-bottom:8px;"><i class="fas fa-truck-loading"></i></div>
+              <div style="font-size:1.1rem;font-weight:700;color:#333;">Materials Used (This Month)</div>
+              <div style="font-size:1.4rem;color:#764ba2;font-weight:900;">320 units</div>
+            </div>
+            <div style="background:#fff;border-radius:12px;box-shadow:0 2px 8px #667eea11;padding:24px 18px;min-width:180px;">
+              <div style="font-size:2.2rem;color:#667eea;margin-bottom:8px;"><i class="fas fa-shopping-cart"></i></div>
+              <div style="font-size:1.1rem;font-weight:700;color:#333;">Pending Orders</div>
+              <div style="font-size:1.4rem;color:#764ba2;font-weight:900;">5 orders</div>
+            </div>
+          </div>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3>Reports & Analytics</h3>
-          <p>Comprehensive reports and insights for better decision making</p>
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+            <h3>Attendance Tracking</h3>
+            <p>Mark, view, and manage daily attendance for all workers and contractors.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-rupee-sign"></i></div>
+            <h3>Payments & Wages</h3>
+            <p>Automate wage calculations and payment records for your workforce.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-building"></i></div>
+            <h3>Project Management</h3>
+            <p>Assign workers, track project progress, and manage sites efficiently.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+            <h3>Reports & Analytics</h3>
+            <p>Visualize attendance, payments, and project data with powerful reports.</p>
+          </div>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🏢</div>
-          <h3>Site Management</h3>
-          <p>Manage multiple project sites and locations from one dashboard</p>
+        <div class="action-buttons">
+          <a href="dashboard.html" class="btn btn-primary">Go to Up</a>
+          <a href="login.html" class="btn btn-secondary">Login</a>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">📱</div>
-          <h3>Responsive Design</h3>
-          <p>Access from any device - desktop, tablet, or mobile</p>
+        <div class="info-section">
+          <h2>Why Choose SVF CRM?</h2>
+          <ul>
+            <li>Easy-to-use interface for all users</li>
+            <li>Comprehensive attendance and payment management</li>
+            <li>Project and site tracking</li>
+            <li>Detailed analytics and reporting</li>
+            <li>Secure and scalable for any business size</li>
+          </ul>
         </div>
-      </div>
-
-      <div class="action-buttons">
-        <a href="login.html" class="btn btn-primary">
-          <span>🔐</span>
-          <span>Login to Dashboard</span>
-        </a>
-        <a href="dashboard.html" class="btn btn-secondary">
-          <span>📊</span>
-          <span>View Demo</span>
-        </a>
-      </div>
-
-      <div class="info-section">
-        <h2>System Features</h2>
-        <ul>
-          <li>User authentication with role-based access control</li>
-          <li>Real-time worker attendance marking and tracking</li>
-          <li>Automated payment calculations based on attendance</li>
-          <li>Multi-site and multi-contractor support</li>
-          <li>Advanced filtering and search capabilities</li>
-          <li>Export data to Excel/PDF formats</li>
-          <li>Comprehensive dashboard with analytics</li>
-          <li>Secure API with JWT authentication</li>
-          <li>Responsive design for all devices</li>
-          <li>Easy-to-use interface for non-technical users</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer">
-      <p>&copy; 2025 SVF Labour Management CRM. All rights reserved.</p>
-    </div>
+      </section>
+      <footer class="crm-footer">
+        <p>&copy; 2025 SVF Labour Management CRM. All rights reserved.</p>
+      </footer>
+    </main>
   </div>
-
-  <script>
-    // Keep index as a landing page; no auto-redirect.
-    // Optional: set API base when hosted statically (e.g., GitHub Pages).
-    // window.API_BASE_URL = 'https://your-backend-domain.com/api';
-  </script>
 </body>
 </html>

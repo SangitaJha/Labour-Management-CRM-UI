@@ -83,7 +83,7 @@ exports.login = async (req, res) => {
         email: 'admin@labourcrm.com', 
         phone: '+91 9876543210',
         role: 'admin', 
-        password: 'admin123' 
+        password: 'onrr' 
       },
       'manager@labourcrm.com': { 
         id: 2, 
