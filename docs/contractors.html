@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractors - SVF Labour Management CRM</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ...existing CSS from file... */
+  </style>
+</head>
+<body>
+  <div class="crm-layout">
+    <aside class="crm-sidebar">
+      <div class="sidebar-logo"><img src="https://img.icons8.com/ios-filled/50/667eea/construction-worker.png" alt="Logo" /> SVF CRM</div>
+      <nav class="sidebar-nav">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a>
+        <a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a>
+        <a href="payments.html"><i class="fas fa-rupee-sign"></i> Payments</a>
+        <a href="workers.html"><i class="fas fa-users"></i> Workers</a>
+        <a href="projects.html"><i class="fas fa-building"></i> Projects</a>
+        <a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+        <a href="contractors.html" class="active"><i class="fas fa-user-tie"></i> Contractors</a>
+        <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+      </nav>
+    </aside>
+    <main class="crm-main">
+      <header class="crm-header">
+        <div class="header-title">
+          <h1>Contractors Management</h1>
+          <span class="header-desc">Manage all contractors across 10 construction sites with complete work details</span>
+        </div>
+      </header>
+      <section class="dashboard-content">
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-icon blue"><i class="fas fa-user-tie"></i></div>
+            <div class="stat-content">
+              <h3>Total Contractors</h3>
+              <div class="stat-value" id="totalContractors">100</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="stat-content">
+              <h3>Active Sites</h3>
+              <div class="stat-value">10</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon orange"><i class="fas fa-briefcase"></i></div>
+            <div class="stat-content">
+              <h3>Work Types</h3>
+              <div class="stat-value">10</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon purple"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-content">
+              <h3>Active Today</h3>
+              <div class="stat-value">85</div>
+            </div>
+          </div>
+        </div>
+        <div class="filter-section">
+          <div class="filter-title"><i class="fas fa-filter"></i> Filter Contractors</div>
+          <div class="filter-grid">
+            <div class="filter-group">
+              <label><i class="fas fa-location-dot"></i> Select Site</label>
+              <select id="filterSite" onchange="loadContractors()">
+                <option value="">All Sites</option>
+                <option value="1">Site 1 - Foundation Work</option>
+                <option value="2">Site 2 - Structural Work</option>
+                <option value="3">Site 3 - Finishing</option>
+                <option value="4">Site 4 - Plumbing</option>
+                <option value="5">Site 5 - Electrical</option>
+                <option value="6">Site 6 - Landscaping</option>
+                <option value="7">Site 7 - Painting</option>
+                <option value="8">Site 8 - Roofing</option>
+                <option value="9">Site 9 - Interiors</option>
+                <option value="10">Site 10 - Finalization</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label><i class="fas fa-hard-hat"></i> Work Type</label>
+              <select id="filterSpecialty" onchange="loadContractors()">
+                <option value="">All Specialties</option>
+                <option value="civil">Civil Work</option>
+                <option value="centring">Centring Work</option>
+                <option value="sand-filling">Sand Filling</option>
+                <option value="electrical">Electrical Work</option>
+                <option value="plumbing">Plumbing Work</option>
+                <option value="carpentry">Carpentry Work</option>
+                <option value="tiling">Tiles Work</option>
+                <option value="jally">Jally Work</option>
+                <option value="grill">Grill Work</option>
+                <option value="painting">Painting Work</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label><i class="fas fa-search"></i> Search Contractor</label>
+              <input type="search" id="searchContractor" placeholder="Search by name or code..." onkeyup="searchContractors()" />
+            </div>
+          </div>
+        </div>
+        <div class="contractors-grid" id="contractorsGrid">
+          <p>Loading contractors...</p>
+        </div>
+      </section>
+      <footer class="crm-footer">
+        <p>&copy; 2025 SVF Labour Management CRM. All rights reserved.</p>
+      </footer>
+    </main>
+  </div>
+  <script>
+    // ...existing JS from file...
+  </script>
+</body>
+</html>
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+    }
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      color: white;
+    }
+    .stat-icon.blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .stat-icon.green { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .stat-icon.orange { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .stat-icon.purple { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .stat-content h3 {
+      margin: 0;
+      font-size: 14px;
+      color: #6c757d;
+      font-weight: 500;
+    }
+    .stat-content .stat-value {
+      margin: 5px 0 0 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    .filter-section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .filter-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 6px;
+    }
+    .filter-group select,
+    .filter-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    .filter-group select:focus,
+    .filter-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .contractors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 25px;
+      margin: 20px 0;
+    }
+    .contractor-card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    .contractor-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .contractor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+      border-color: #667eea;
+    }
+    .contractor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+    .contractor-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c3e50;
+      line-height: 1.3;
+    }
+    .contractor-code {
+      font-size: 13px;
+      color: white;
+      padding: 5px 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .contractor-specialty {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 8px 0;
+      text-transform: capitalize;
+    }
+    .contractor-info {
+      margin: 15px 0 0 0;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    .contractor-info div {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: #495057;
+    }
+    .contractor-info i {
+      width: 24px;
+      color: #667eea;
+      margin-right: 10px;
+      font-size: 16px;
+    }
+    .contractor-info a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .contractor-info a:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<!-- All legacy/duplicate markup removed. Unified CRM layout retained. -->

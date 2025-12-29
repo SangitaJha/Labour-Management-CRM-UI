@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CRM – Labour Attendance Format</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f5f7fb; margin:0; padding:20px; color:#1f2933; }
+    .container { max-width: 1000px; margin: 0 auto; background:#fff; padding:24px; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.08); }
+    h1 { margin:0 0 8px; font-size:22px; }
+    h2 { margin:16px 0 8px; font-size:16px; }
+    .meta { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:16px; }
+    .meta label { font-weight:600; font-size:12px; color:#4b5563; display:block; margin-bottom:4px; }
+    .meta input { width:100%; padding:8px; border:1px solid #d1d5db; border-radius:6px; font-size:13px; }
+    table { width:100%; border-collapse: collapse; margin-top:12px; font-size:13px; }
+    th, td { border:1px solid #e5e7eb; padding:8px; text-align:left; }
+    th { background:#f8fafc; font-weight:700; }
+    .summary { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-top:14px; }
+    .summary .card { background:#f8fafc; border:1px solid #e5e7eb; border-radius:8px; padding:10px; }
+    .card label { font-weight:600; font-size:12px; color:#4b5563; display:block; margin-bottom:4px; }
+    .card input { width:100%; padding:8px; border:1px solid #d1d5db; border-radius:6px; font-size:13px; }
+    .print-btn { margin-top:16px; padding:10px 14px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px; }
+    .print-btn:hover { background:#1d4ed8; }
+    @media print {
+      body { background:#fff; padding:0; }
+      .container { box-shadow:none; border-radius:0; }
+      .print-btn { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CRM – Labour Attendance Format</h1>
+    <h2>Project Details</h2>
+    <div class="meta">
+      <div><label>Project Name</label><input type="text" placeholder=""></div>
+      <div><label>Site Location</label><input type="text" placeholder=""></div>
+      <div><label>Contractor Name</label><input type="text" placeholder=""></div>
+      <div><label>Supervisor Name</label><input type="text" placeholder=""></div>
+      <div><label>Month / Date</label><input type="text" placeholder=""></div>
+    </div>
+
+    <h2>Attendance Register</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Labour ID</th>
+          <th>Labour Name</th>
+          <th>Mobile No</th>
+          <th>Work Type</th>
+          <th>In Time</th>
+          <th>Out Time</th>
+          <th>Total Hours</th>
+          <th>OT Hours</th>
+          <th>Present / Absent</th>
+          <th>Wage per Day</th>
+          <th>Amount</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>L001</td>
+          <td>Ramesh</td>
+          <td>9XXXXXXXXX</td>
+          <td>Mason</td>
+          <td>9:00 AM</td>
+          <td>6:00 PM</td>
+          <td>9</td>
+          <td>1</td>
+          <td>Present</td>
+          <td>₹800</td>
+          <td>₹800</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>L002</td>
+          <td>Suresh</td>
+          <td>9XXXXXXXXX</td>
+          <td>Helper</td>
+          <td>9:15 AM</td>
+          <td>5:30 PM</td>
+          <td>8</td>
+          <td>0</td>
+          <td>Present</td>
+          <td>₹600</td>
+          <td>₹600</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>L003</td>
+          <td>Kumar</td>
+          <td>9XXXXXXXXX</td>
+          <td>Electrician</td>
+          <td>–</td>
+          <td>–</td>
+          <td>0</td>
+          <td>0</td>
+          <td>Absent</td>
+          <td>₹900</td>
+          <td>₹0</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Summary</h2>
+    <div class="summary">
+      <div class="card"><label>Total Labour Count</label><input type="text" value="3"></div>
+      <div class="card"><label>Present</label><input type="text" value="2"></div>
+      <div class="card"><label>Absent</label><input type="text" value="1"></div>
+      <div class="card"><label>Total Wages</label><input type="text" value="₹1,400"></div>
+      <div class="card"><label>Approved By</label><input type="text" value=""></div>
+      <div class="card"><label>Signature</label><input type="text" value=""></div>
+    </div>
+
+    <h2>CRM Mandatory Fields (Digital)</h2>
+    <ul>
+      <li>Labour ID (Auto-generated)</li>
+      <li>Attendance Date</li>
+      <li>Geo-location (Optional)</li>
+      <li>Supervisor Approval</li>
+      <li>Payment Status (Paid / Pending)</li>
+    </ul>
+
+    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+</body>
+</html>

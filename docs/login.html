@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - SVF Labour Management CRM</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(120deg, #e0e7ff 0%, #f8fafc 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .navbar {
+      width: 100%;
+      background: #fff;
+      box-shadow: 0 2px 12px #667eea11;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #667eea;
+      letter-spacing: 1px;
+    }
+    .navbar .logo img {
+      height: 38px;
+      width: 38px;
+      border-radius: 8px;
+      background: #e0e7ff;
+      object-fit: cover;
+    }
+    .navbar nav a {
+      color: #333;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 28px;
+      font-size: 1.08rem;
+      transition: color 0.2s;
+    }
+    .navbar nav a:hover {
+      color: #667eea;
+    }
+    .login-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(102,126,234,0.10);
+      padding: 48px 32px;
+      max-width: 400px;
+      width: 100%;
+      margin: 48px auto 0 auto;
+    }
+    .login-title {
+      text-align: center;
+      color: #667eea;
+      font-size: 2rem;
+      margin-bottom: 24px;
+      font-weight: 900;
+    }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; }
+    .form-group input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ced4da; font-size: 1rem; }
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: all 0.3s cubic-bezier(.4,2,.3,1);
+      box-shadow: 0 2px 8px #667eea22;
+    }
+    .btn-login:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.18);
+    }
+    .login-footer {
+      text-align: center;
+      margin-top: 18px;
+      color: #666;
+      font-size: 0.95rem;
+    }
+    .footer {
+      text-align: center;
+      padding: 32px 0 0 0;
+      color: #999;
+      font-size: 0.98rem;
+      background: #fff;
+      margin-top: 48px;
+      border-top: 1px solid #e0e7ef;
+    }
+    @media (max-width: 600px) {
+      .navbar { padding: 0 8px; }
+      .login-container { padding: 24px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container" style="background:#fff;border-radius:18px;box-shadow:0 8px 32px #667eea22;padding:48px 32px;max-width:400px;width:100%;margin:48px auto 0 auto;">
+    <div class="login-title" style="text-align:center;color:#667eea;font-size:2rem;margin-bottom:24px;font-weight:900;">
+      <img src="/SVF%20ICON.jpeg" alt="SVF Homes Logo" style="height:56px;width:56px;border-radius:12px;background:#e0e7ff;object-fit:cover;margin-bottom:10px;box-shadow:0 2px 8px #667eea22;" />
+      <div style="margin-top:8px;font-size:1.3rem;font-weight:700;">SVF Homes Logo</div>
+      <div style="margin-top:4px;">Login to SVF Labour Management CRM</div>
+    </div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="loginEmail"><i class="fas fa-envelope"></i> Email Address</label>
+        <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your email" required autofocus />
+      </div>
+      <div class="form-group">
+        <label for="loginPassword"><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter your password" required />
+      </div>
+      <button type="submit" id="loginBtn" class="btn-login">Login</button>
+    </form>
+    <div class="login-footer" style="text-align:center;margin-top:18px;color:#666;font-size:0.95rem;">&copy; 2025 SVF Labour Management CRM. All rights reserved.</div>
+    <div class="demo-section" style="background:#f8f9fa;padding:20px 30px;border-top:1px solid #e0e0e0;margin-top:24px;">
+      <h3 style="font-size:12px;color:#999;text-transform:uppercase;margin-bottom:12px;letter-spacing:0.5px;">Demo Credentials</h3>
+      <div class="demo-users" style="display:grid;gap:8px;">
+        <div class="demo-user" onclick="demoLogin('admin@labourcrm.com','admin')"><strong>Username:</strong> admin@labourcrm.com<br><strong>Password:</strong> admin</div>
+      </div>
+    </div>
+  </div>
+  <style>
+    body {
+      background: #fff;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      position: relative;
+    }
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 16px 32px 0 32px;
+      position: relative;
+    }
+    .logo-img {
+      height: 54px;
+      margin-right: 18px;
+    }
+    .crm-title {
+      font-size: 2.5rem;
+      color: #2980c7;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-top: 10px;
+    }
+    .underline {
+      width: 100%;
+      height: 4px;
+      background: #2980c7;
+      margin-bottom: 32px;
+    }
+    .login-bg-logo {
+      position: absolute;
+      top: 120px;
+      left: 0;
+      width: 100vw;
+      text-align: center;
+      opacity: 0.08;
+      z-index: 0;
+    }
+    .login-bg-logo img {
+      max-width: 400px;
+      width: 60vw;
+    }
+    .login-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 60vh;
+      position: relative;
+      z-index: 1;
+    }
+    .login-card {
+      background: #2980c7;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(41,128,199,0.10);
+      padding: 38px 32px 32px 32px;
+      max-width: 340px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .login-card-title {
+      color: #222;
+      background: #fff;
+      border-radius: 8px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 8px 32px;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+    .login-card input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 18px;
+      font-size: 1.08rem;
+      outline: none;
+    }
+    .login-card button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      background: #fff;
+      color: #2980c7;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .login-card button:hover {
+      background: #eaf4fb;
+      color: #1a5a99;
+    }
+    @media (max-width: 600px) {
+      .header-bar { padding: 12px 8px 0 8px; }
+      .crm-title { font-size: 2rem; }
+      .login-card { padding: 24px 8px; }
+      .login-bg-logo img { max-width: 220px; }
+    }
+  </style>
+</body>
+</html>
+
+
+    .btn-login.loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .demo-section {
+      background: #f8f9fa;
+      padding: 20px 30px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .demo-section h3 {
+      font-size: 12px;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .demo-users {
+      display: grid;
+      gap: 8px;
+    }
+
+    .demo-user {
+      background: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid #e0e0e0;
+    }
+
+    .demo-user:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .demo-user strong {
+      display: block;
+      color: inherit;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <!-- Login Section -->
+    <div id="loginSection">
+      <div class="login-header">
+        <h1>🏗️ SVF Labour CRM</h1>
+        <p>Professional Labour Management System</p>
+      </div>
+
+      <div class="login-form">
+        <div id="alertBox" class="alert"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <input 
+              type="email" 
+              id="loginEmail" 
+              name="email" 
+              placeholder="Enter your email"
+              required
+            >
+            <div class="error-message">Please enter a valid email</div>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input 
+              type="password" 
+              id="loginPassword" 
+              name="password" 
+              placeholder="Enter your password"
+              required
+            >
+            <div class="error-message">Password is required</div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-login" id="loginBtn">
+              <span class="loading-spinner"></span>
+              Sign In
+            </button>
+          </div>
+        </form>
+
+        <div class="signin-toggle">
+          Don't have an account? <a onclick="toggleSection()">Register here</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Section (Hidden by default) -->
+    <div id="registerSection" style="display: none;">
+      <div class="login-header">
+        <h1>🏗️ SVF Labour CRM</h1>
+        <p>Create Your Account</p>
+      </div>
+
+      <div class="login-form">
+        <div id="alertBoxReg" class="alert"></div>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label for="regName">Full Name</label>
+            <input 
+              type="text" 
+              id="regName" 
+              name="name" 
+              placeholder="Enter your full name"
+              required
+            >
+            <div class="error-message">Name is required</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regEmail">Email Address</label>
+            <input 
+              type="email" 
+              id="regEmail" 
+              name="email" 
+              placeholder="Enter your email"
+              required
+            >
+            <div class="error-message">Valid email is required</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regPhone">Phone Number</label>
+            <input 
+              type="tel" 
+              id="regPhone" 
+              name="phone" 
+              placeholder="Enter your phone number"
+              required
+            >
+            <div class="error-message">Phone number is required</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regRole">Role</label>
+            <select id="regRole" name="role" required>
+              <option value="">-- Select Role --</option>
+              <option value="supervisor">Site Supervisor</option>
+              <option value="manager">Project Manager</option>
+              <option value="admin">Administrator</option>
+              <option value="accounts">Accounts Officer</option>
+            </select>
+            <div class="error-message">Role is required</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <input 
+              type="password" 
+              id="regPassword" 
+              name="password" 
+              placeholder="Enter a strong password"
+              required
+            >
+            <div class="error-message">Password is required (min 6 characters)</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regConfirmPassword">Confirm Password</label>
+            <input 
+              type="password" 
+              id="regConfirmPassword" 
+              name="confirmPassword" 
+              placeholder="Confirm your password"
+              required
+            >
+            <div class="error-message">Passwords do not match</div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-login" id="registerBtn">
+              <span class="loading-spinner"></span>
+              Create Account
+            </button>
+          </div>
+        </form>
+
+        <div class="signin-toggle">
+          Already have an account? <a onclick="toggleSection()">Sign in here</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo Users Section -->
+    <div class="demo-section">
+      <h3>Demo Credentials</h3>
+  <form id="loginForm">
+    <div class="form-group">
+      <label for="username" style="font-weight:bold;font-size:1.1rem;">Username</label>
+      <input type="text" id="username" required placeholder="Enter username" style="font-weight:bold;font-size:1.1rem;">
+    </div>
+    <div class="form-group">
+      <label for="password" style="font-weight:bold;font-size:1.1rem;">Password</label>
+      <input type="password" id="password" required placeholder="Enter password" style="font-weight:bold;font-size:1.1rem;">
+    </div>
+    <button type="submit" class="btn" style="font-weight:bold;font-size:1.15rem;">Login</button>
+  </form>
+  <div class="login-footer" style="font-weight:bold;font-size:1.1rem;color:#007bff;">Demo Credentials: <span style="background:#e3f2fd;padding:4px 10px;border-radius:6px;">admin</span> / <span style="background:#e3f2fd;padding:4px 10px;border-radius:6px;">admin</span></div>
+
+      // Clear previous alerts and forms
+      document.getElementById('alertBox').className = 'alert';
+      document.getElementById('alertBoxReg').className = 'alert';
+      document.getElementById('loginForm').reset();
+      document.getElementById('registerForm').reset();
+    }
+
+    function showAlert(elementId, message, type) {
+      const alert = document.getElementById(elementId);
+      alert.textContent = message;
+      alert.className = `alert ${type}`;
+      setTimeout(() => {
+        alert.className = 'alert';
+      }, 5000);
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginBtn');
+
+      // Validate
+      if (!email || !password) {
+        showAlert('alertBox', 'Please fill in all fields', 'error');
+        return;
+      }
+
+      // Show loading
+      btn.disabled = true;
+      btn.querySelector('.loading-spinner').style.display = 'inline-block';
+
+      try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Store token and user info
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          
+          showAlert('alertBox', '✅ Login successful! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = '/dashboard.html';
+          }, 1500);
+        } else {
+          showAlert('alertBox', data.error || 'Login failed', 'error');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showAlert('alertBox', 'Network error. Please try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.querySelector('.loading-spinner').style.display = 'none';
+      }
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const phone = document.getElementById('regPhone').value;
+      const role = document.getElementById('regRole').value;
+      const password = document.getElementById('regPassword').value;
+      const confirmPassword = document.getElementById('regConfirmPassword').value;
+      const btn = document.getElementById('registerBtn');
+
+      // Validate
+      if (!name || !email || !phone || !role || !password || !confirmPassword) {
+        showAlert('alertBoxReg', 'Please fill in all fields', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAlert('alertBoxReg', 'Password must be at least 6 characters', 'error');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showAlert('alertBoxReg', 'Passwords do not match', 'error');
+        return;
+      }
+
+      // Show loading
+      btn.disabled = true;
+      btn.querySelector('.loading-spinner').style.display = 'inline-block';
+
+      try {
+        const response = await fetch(`${API_URL}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, phone, role, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showAlert('alertBoxReg', '✅ Account created! Please login now.', 'success');
+          setTimeout(() => {
+            toggleSection();
+          }, 1500);
+        } else {
+          showAlert('alertBoxReg', data.error || 'Registration failed', 'error');
+        }
+      } catch (error) {
+        console.error('Register error:', error);
+        showAlert('alertBoxReg', 'Network error. Please try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.querySelector('.loading-spinner').style.display = 'none';
+      }
+    }
+
+    function demoLogin(email, password) {
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('loginPassword').value = password;
+      document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+    }
+
+    // Check if already logged in
+    window.addEventListener('load', () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        window.location.href = '/dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Labour Attendance</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="js/auth.js"></script>
+  <style>
+    .attendance-table { width: 100%; margin-top: 12px; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .attendance-table table { width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
+    .attendance-table thead { background: #f8f9fa; }
+    .attendance-table th { padding: 6px 6px; text-align: left; font-weight: 600; color: #495057; border-bottom: 2px solid #e0e0e0; white-space: nowrap; }
+    .attendance-table td { padding: 6px 6px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .attendance-table tbody tr:hover { background: #f8f9fa; }
+    .filter-bar { background: #fff; padding: 8px; border-radius: 8px; margin-bottom: 12px; display: flex; gap: 6px; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.06); flex-wrap: wrap; }
+    .filter-bar select, .filter-bar input { padding: 6px 8px; border: 1px solid #ced4da; border-radius: 4px; font-size: 11px; }
+    .btn { padding: 7px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+    .btn-primary { background: #007bff; color: #fff; }
+    .btn-primary:hover { background: #0056b3; }
+    .btn-success { background: #28a745; color: #fff; }
+    .btn-success:hover { background: #218838; }
+    .btn-sm { padding: 4px 8px; font-size: 11px; }
+    .status-draft { background: #e9ecef; color: #495057; padding: 3px 6px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+    .status-submitted { background: #cfe2ff; color: #084298; padding: 3px 6px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+    .status-approved { background: #d1e7dd; color: #0f5132; padding: 3px 6px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+    .status-rejected { background: #f8d7da; color: #842029; padding: 3px 6px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+    .status-present { background: #d4edda; color: #155724; padding: 3px 6px; border-radius: 3px; font-size: 11px; }
+    .status-absent { background: #f8d7da; color: #721c24; padding: 3px 6px; border-radius: 3px; font-size: 11px; }
+    .status-half_day { background: #fff3cd; color: #856404; padding: 3px 6px; border-radius: 3px; font-size: 11px; }
+    .status-leave { background: #cce5ff; color: #004085; padding: 3px 6px; border-radius: 3px; font-size: 11px; }
+    .status-overtime { background: #d1ecf1; color: #0c5460; padding: 3px 6px; border-radius: 3px; font-size: 11px; }
+    .status-pending { background: #fff3cd; color: #856404; padding: 3px 6px; border-radius: 3px; font-size: 11px; }
+    .status-paid { background: #d4edda; color: #155724; padding: 3px 6px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+    .status-partial { background: #d1ecf1; color: #0c5460; padding: 3px 6px; border-radius: 3px; font-size: 11px; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+    .modal.active { display: flex; align-items: center; justify-content: center; }
+    .modal-content { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); width: 95%; max-width: 1200px; max-height: 90vh; overflow-y: auto; }
+    .modal-close { float: right; font-size: 24px; cursor: pointer; color: #aaa; }
+    .modal-close:hover { color: #000; }
+    .form-group { margin: 10px 0; }
+    .form-group label { display: block; margin-bottom: 4px; font-weight: 600; color: #2c3e50; font-size: 12px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 7px; border: 1px solid #ced4da; border-radius: 4px; font-size: 12px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+    .section-title { font-weight: 700; color: #2c3e50; margin-top: 15px; margin-bottom: 10px; border-bottom: 2px solid #667eea; padding-bottom: 8px; }
+    .material-items { background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px; }
+    .material-item { display: grid; grid-template-columns: 1fr 1fr 1fr 80px; gap: 8px; margin-bottom: 8px; align-items: end; }
+    .material-item input { padding: 6px; border: 1px solid #ced4da; border-radius: 4px; font-size: 12px; }
+    .material-item button { padding: 6px 10px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; }
+    .add-material-btn { background: #28a745; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; margin-bottom: 10px; }
+    .daily-summary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 8px; margin-top: 15px; }
+    .summary-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 13px; }
+    .summary-total { font-weight: 700; font-size: 16px; }
+    .view-details-btn { background: #17a2b8; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; }
+  </style>
+</head>
+
+  <div class="crm-layout">
+    <aside class="crm-sidebar">
+      <div class="sidebar-logo">
+        <img src="https://img.icons8.com/ios-filled/50/667eea/construction-worker.png" alt="Logo" />
+        <span>SVF CRM</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a>
+        <a href="attendance.html" class="active"><i class="fas fa-calendar-check"></i> Attendance</a>
+        <a href="payments.html"><i class="fas fa-rupee-sign"></i> Payments</a>
+        <a href="workers.html"><i class="fas fa-users"></i> Workers</a>
+        <a href="projects.html"><i class="fas fa-building"></i> Projects</a>
+        <a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+        <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+      </nav>
+    </aside>
+    <main class="crm-main">
+      <header class="crm-header">
+        <div class="header-title">
+          <h1>Labour Attendance</h1>
+          <span class="header-desc">Track daily attendance, work, and payments</span>
+        </div>
+        <div class="header-user">
+          <button class="btn btn-primary" onclick="openMarkAttendanceModal()"><i class="fas fa-plus"></i> Mark Attendance</button>
+          <button class="btn btn-success" onclick="exportExcel()"><i class="fas fa-download"></i> Excel</button>
+        </div>
+      </header>
+      <section class="dashboard-content">
+        <div class="filter-bar">
+          <input type="date" id="filterDate" onchange="loadAttendance()" placeholder="Filter by date">
+          <select id="filterStatus" onchange="loadAttendance()">
+            <option value="">All Status</option>
+            <option value="present">Present</option>
+            <option value="absent">Absent</option>
+            <option value="half_day">Half Day</option>
+            <option value="overtime">Overtime</option>
+          </select>
+          <select id="filterPaymentStatus" onchange="loadAttendance()">
+            <option value="">All Payment</option>
+            <option value="pending">Pending</option>
+            <option value="partial">Partial</option>
+            <option value="paid">Paid</option>
+          </select>
+        </div>
+        <div class="attendance-table">
+          <table id="attendanceTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Labour</th>
+                <th>Work</th>
+                <th>In/Out</th>
+                <th>Hrs</th>
+                <th>OT</th>
+                <th>Wage (₹)</th>
+                <th>Mat (₹)</th>
+                <th>Total (₹)</th>
+                <th>Flow</th>
+                <th>Pay</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="attendanceBody">
+              <tr><td colspan="12" style="text-align: center; color: #6c757d;">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <footer class="crm-footer">
+        <p>&copy; 2025 SVF Labour Management CRM. All rights reserved.</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Mark Attendance Modal -->
+  <div class="modal" id="attendanceModal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeMarkAttendanceModal()">&times;</span>
+      <h2>Mark Attendance with Work & Material Details</h2>
+      <form onsubmit="submitAttendance(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Date <span style="color: red;">*</span></label>
+            <input type="date" id="attendanceDate" required>
+          </div>
+          <div class="form-group">
+            <label>Labour Name <span style="color: red;">*</span></label>
+            <select id="labourName" required>
+              <option value="">Select Labour</option>
+              <option value="Ravi Kumar" data-id="L001">Ravi Kumar</option>
+              <option value="Anand" data-id="L002">Anand</option>
+              <option value="Suresh Babu" data-id="L003">Suresh Babu</option>
+              <option value="Mohan Singh" data-id="L004">Mohan Singh</option>
+              <option value="Prakash Reddy" data-id="L005">Prakash Reddy</option>
+              <option value="Vijay Kumar" data-id="L006">Vijay Kumar</option>
+            </select>
+            <div style="display:flex; gap:6px; margin-top:6px; align-items:center;">
+              <input type="text" id="newLabourName" placeholder="Add labour name" style="flex:1; padding:6px; border:1px solid #ced4da; border-radius:4px; font-size:11px;" />
+              <button type="button" class="btn btn-sm btn-success" onclick="addLabourName()"><i class="fas fa-plus"></i> Add</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Work Type <span style="color: red;">*</span></label>
+            <select id="workType" required>
+              <option value="">Select Work Type</option>
+              <option value="Mason">Mason</option>
+              <option value="Helper">Helper</option>
+              <option value="Carpenter">Carpenter</option>
+              <option value="Electrician">Electrician</option>
+              <option value="Plumber">Plumber</option>
+              <option value="Painter">Painter</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>In Time</label>
+            <input type="time" id="inTime">
+          </div>
+          <div class="form-group">
+            <label>Out Time</label>
+            <input type="time" id="outTime">
+          </div>
+          <div class="form-group">
+            <label>Wage per Day (₹) <span style="color: red;">*</span></label>
+            <input type="number" id="wagePerDay" value="500" step="10" required>
+          </div>
+        </div>
+
+        <div class="section-title"><i class="fas fa-briefcase"></i> Work Details</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Work Description</label>
+            <input type="text" id="workDescription" placeholder="e.g., Foundation Laying, Brickwork, Concrete Casting">
+          </div>
+          <div class="form-group">
+            <label>Work Location/Area</label>
+            <input type="text" id="workArea" placeholder="e.g., Main Block, Wing A, Floor 2">
+          </div>
+          <div class="form-group">
+            <label>Units Completed</label>
+            <input type="text" id="workUnits" placeholder="e.g., 100 sq.m, 500 bricks, 10 cu.m">
+          </div>
+          <div class="form-group">
+            <label>Work Remarks</label>
+            <textarea id="workRemarks" placeholder="Work quality, progress, notes..." rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="section-title"><i class="fas fa-cubes"></i> Material Details</div>
+        <button type="button" class="add-material-btn" onclick="addMaterialRow()"><i class="fas fa-plus"></i> Add Material</button>
+        <div class="material-items" id="materialContainer">
+          <div class="material-item">
+            <div><label style="font-size: 10px; color: #666;">Material Name</label><input type="text" placeholder="e.g., Cement, Brick, Steel" class="material-name"></div>
+            <div><label style="font-size: 10px; color: #666;">Quantity</label><input type="text" placeholder="e.g., 50, 100, 5" class="material-qty"></div>
+            <div><label style="font-size: 10px; color: #666;">Unit</label><input type="text" placeholder="e.g., bags, pcs, ton" class="material-unit"></div>
+            <div><label style="font-size: 10px; color: #666;">Cost (₹)</label><input type="number" placeholder="0" class="material-cost" step="0.01" oninput="calculateTotalCost()"></div>
+          </div>
+        </div>
+        <div class="daily-summary">
+          <div class="summary-row">
+            <span>Daily Wage (₹):</span>
+            <span id="summaryWage">500</span>
+          </div>
+          <div class="summary-row">
+            <span>Total Material Cost (₹):</span>
+            <span id="summaryMaterialCost">0</span>
+          </div>
+          <div class="summary-row summary-total" style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 8px;">
+            <span>Total Payable (₹):</span>
+            <span id="summaryTotal">500</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 12px;"><i class="fas fa-check"></i> Mark Attendance with Details</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // API_URL is already defined in auth.js
+    let attendanceData = [];
+    
+    console.log('=== ATTENDANCE SCRIPT LOADED ===');
+
+    function openMarkAttendanceModal() {
+      document.getElementById('attendanceModal').classList.add('active');
+      document.getElementById('attendanceDate').valueAsDate = new Date();
+      resetMaterialRows();
+    }
+
+    function closeMarkAttendanceModal() {
+      document.getElementById('attendanceModal').classList.remove('active');
+    }
+
+    function resetMaterialRows() {
+      const container = document.getElementById('materialContainer');
+      container.innerHTML = `
+        <div class="material-item">
+          <div><label style="font-size: 10px; color: #666;">Material Name</label><input type="text" placeholder="e.g., Cement, Brick, Steel" class="material-name"></div>
+          <div><label style="font-size: 10px; color: #666;">Quantity</label><input type="text" placeholder="e.g., 50, 100, 5" class="material-qty"></div>
+          <div><label style="font-size: 10px; color: #666;">Unit</label><input type="text" placeholder="e.g., bags, pcs, ton" class="material-unit"></div>
+          <div><label style="font-size: 10px; color: #666;">Cost (₹)</label><input type="number" placeholder="0" class="material-cost" step="0.01" oninput="calculateTotalCost()"></div>
+        </div>
+      `;
+      calculateTotalCost();
+    }
+
+    function addMaterialRow() {
+      const container = document.getElementById('materialContainer');
+      const newRow = document.createElement('div');
+      newRow.className = 'material-item';
+      newRow.innerHTML = `
+        <div><input type="text" placeholder="e.g., Cement, Brick, Steel" class="material-name"></div>
+        <div><input type="text" placeholder="e.g., 50, 100, 5" class="material-qty"></div>
+        <div><input type="text" placeholder="e.g., bags, pcs, ton" class="material-unit"></div>
+        <div style="display: flex; gap: 5px;">
+          <input type="number" placeholder="0" class="material-cost" style="flex: 1;" step="0.01" oninput="calculateTotalCost()">
+          <button type="button" onclick="this.parentElement.parentElement.remove(); calculateTotalCost();" style="padding: 6px 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">Remove</button>
+        </div>
+      `;
+      container.appendChild(newRow);
+      calculateTotalCost();
+    }
+
+    function calculateTotalCost() {
+      const wagePerDay = parseFloat(document.getElementById('wagePerDay').value) || 500;
+      const materialRows = document.querySelectorAll('.material-item');
+      let totalMaterialCost = 0;
+
+      materialRows.forEach(row => {
+        const costInput = row.querySelector('.material-cost');
+        if (costInput && costInput.value) {
+          totalMaterialCost += parseFloat(costInput.value) || 0;
+        }
+      });
+
+      const totalPayable = wagePerDay + totalMaterialCost;
+
+      document.getElementById('summaryWage').textContent = wagePerDay.toFixed(2);
+      document.getElementById('summaryMaterialCost').textContent = totalMaterialCost.toFixed(2);
+      document.getElementById('summaryTotal').textContent = totalPayable.toFixed(2);
+    }
+
+    function collectMaterials() {
+      const rows = document.querySelectorAll('.material-item');
+      const items = [];
+      rows.forEach(row => {
+        const nameEl = row.querySelector('.material-name');
+        const qtyEl = row.querySelector('.material-qty');
+        const unitEl = row.querySelector('.material-unit');
+        const costEl = row.querySelector('.material-cost');
+        const name = nameEl && nameEl.value ? nameEl.value : '';
+        const qty = qtyEl && qtyEl.value ? qtyEl.value : '';
+        const unit = unitEl && unitEl.value ? unitEl.value : '';
+        const cost = parseFloat(costEl && costEl.value ? costEl.value : '0') || 0;
+        if (name || cost) {
+          items.push({ name, qty, unit, cost });
+        }
+      });
+      return items;
+    }
+
+    async function api(endpoint, options = {}) {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json',
+        ...(options.headers || {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      };
+      const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        alert('Session expired, please log in again.');
+        return null;
+      }
+      if (!res.ok) {
+        throw new Error(data.error || 'Request failed');
+      }
+      return data;
+    }
+
+    function addNameToSelect(name, id) {
+      const select = document.getElementById('labourName');
+      if (!select || !name) return;
+      const exists = Array.from(select.options).some(o => o.value.toLowerCase() === String(name).toLowerCase());
+      if (exists) return;
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      if (id) opt.dataset.id = id;
+      select.appendChild(opt);
+    }
+
+    async function initLabourDropdown() {
+      const select = document.getElementById('labourName');
+      if (!select) return;
+
+      // 1) Try backend API
+      let apiNames = [];
+      try {
+        const res = await api('/labour');
+        const items = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : []);
+        apiNames = items.map(w => ({
+          name: w.labour_name || w.name || w.full_name || w.worker_name || '',
+          id: w.labour_id || w.id || ''
+        })).filter(x => x.name);
+      } catch (e) {
+        // 2) Demo fallback
+        apiNames = [
+          { name: 'Sunil', id: 'L101' },
+          { name: 'Akash', id: 'L102' },
+          { name: 'Deepak', id: 'L103' },
+          { name: 'Imran', id: 'L104' },
+          { name: 'Rafiq', id: 'L105' }
+        ];
+      }
+
+      apiNames.forEach(({ name, id }) => addNameToSelect(name, id));
+
+      // 3) Merge any saved local names
+      try {
+        const stored = localStorage.getItem('labourNames');
+        const list = stored ? JSON.parse(stored) : [];
+        list.forEach(name => addNameToSelect(name));
+      } catch {}
+    }
+
+    function addLabourName() {
+      const input = document.getElementById('newLabourName');
+      const name = (input && input.value || '').trim();
+      if (!name) { alert('Enter a labour name'); return; }
+      const select = document.getElementById('labourName');
+      // Prevent duplicates in current select
+      const exists = Array.from(select.options).some(o => o.value.toLowerCase() === name.toLowerCase());
+      if (exists) { alert('Name already exists'); return; }
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      opt.dataset.id = `L${Math.floor(Math.random()*900)+100}`;
+      select.appendChild(opt);
+      select.value = name;
+      input.value = '';
+      // Persist to localStorage
+      try {
+        const stored = localStorage.getItem('labourNames');
+        const list = stored ? JSON.parse(stored) : [];
+        list.push(name);
+        localStorage.setItem('labourNames', JSON.stringify(list));
+      } catch {}
+    }
+
+    function normalizeAttendance(item, idx = 0) {
+      const labour = item.labour || {};
+      const workDetails = item.work_details || { description: '-', area: '-', units: '-', remarks: '-' };
+      const materialDetails = item.material_details || [];
+      const wage = parseFloat(item.wage_per_day || item.wage || 0) || 0;
+      const totalHours = (item.total_hours !== undefined ? item.total_hours : (item.hours !== undefined ? item.hours : 0));
+      const otHours = (item.ot_hours !== undefined ? item.ot_hours : Math.max(0, totalHours - 8));
+      const materialsCost = parseFloat(item.materials_cost || 0) || 0;
+      const otAmount = otHours * (wage / 8) * 1.5;
+      const totalPayable = (item.total_payable !== undefined ? item.total_payable : wage + materialsCost + otAmount);
+      return {
+        id: item.id || item.attendance_id || idx + 1,
+        date: item.attendance_date || item.date || '-',
+        labour_name: labour.labour_name || item.labour_name || item.worker_name || 'Worker',
+        work_type: labour.work_type || item.work_type || '-',
+        in_time: item.in_time || '-',
+        out_time: item.out_time || '-',
+        hours: totalHours,
+        ot_hours: otHours,
+        wage_per_day: wage,
+        materials_cost: materialsCost,
+        total_payable: totalPayable,
+        work_details: workDetails,
+        material_details: materialDetails,
+        workflow_status: item.workflow_status || 'draft',
+        payment_status: item.payment_status || 'pending'
+      };
+    }
+
+    function getSampleAttendance() {
+      return [
+        {
+          id: 1,
+          date: '2024-12-21',
+          labour_name: 'Rajesh Kumar',
+          work_type: 'Mason',
+          in_time: '08:00 AM',
+          out_time: '05:00 PM',
+          hours: 9,
+          ot_hours: 1,
+          wage_per_day: 800,
+          materials_cost: 250,
+          total_payable: 950,
+          work_details: { description: 'Wall Construction', area: 'Building A', units: '50 sq.ft', remarks: 'Quality work' },
+          material_details: [{ name: 'Cement', qty: 2, unit: 'bags', cost: 150 }, { name: 'Sand', qty: 1, unit: 'trolley', cost: 100 }],
+          workflow_status: 'draft',
+          payment_status: 'pending'
+        }
+      ];
+    }
+
+    async function loadAttendance() {
+      console.log('Loading attendance...');
+      // let usedDemo = false;
+      try {
+        const response = await api('/attendance');
+        console.log('API response:', response);
+        if (response && Array.isArray(response)) {
+          attendanceData = response.map((r, idx) => normalizeAttendance(r, idx));
+        } else if (response && Array.isArray(response.data)) {
+          attendanceData = response.data.map((r, idx) => normalizeAttendance(r, idx));
+        } else {
+          console.log('Using sample attendance (invalid response)');
+          attendanceData = getSampleAttendance();
+          // usedDemo = true;
+        }
+      } catch (e) {
+        console.error('Attendance load error:', e);
+        attendanceData = getSampleAttendance();
+        // usedDemo = true;
+      }
+      // document.getElementById('demoBanner').style.display = usedDemo ? 'block' : 'none';
+      console.log('Displaying', attendanceData.length, 'records');
+      displayAttendance(attendanceData);
+    }
+
+    function displayAttendance(data) {
+      console.log('=== DISPLAY ATTENDANCE CALLED with', data.length, 'records ===');
+      const tbody = document.getElementById('attendanceBody');
+      if (!tbody) {
+        console.error('ERROR: attendanceBody element not found!');
+        return;
+      }
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; color: #6c757d;">No records found</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map((a, idx) => {
+        const workflowStatus = a.workflow_status || 'draft';
+        const paymentStatus = a.payment_status || 'pending';
+        const otHours = a.ot_hours || 0;
+
+        let actionButtons = '';
+        if (workflowStatus === 'draft') {
+          actionButtons = `<button class="btn btn-primary btn-sm" onclick="submitForApproval(${idx})">Submit</button>`;
+        } else if (workflowStatus === 'submitted') {
+          actionButtons = `
+            <button class="btn btn-success btn-sm" onclick="approveAttendance(${idx})">Approve</button>
+            <button class="btn" style="background:#dc3545;color:white;font-size:11px;padding:4px 8px;margin-left:4px;" onclick="rejectAttendance(${idx})">Reject</button>
+          `;
+        } else if (workflowStatus === 'approved') {
+          actionButtons = `<button class="btn btn-success btn-sm" onclick="markAsPaid(${idx})">Mark Paid</button>`;
+        }
+
+        return `
+          <tr>
+            <td><strong>${a.date}</strong></td>
+            <td><strong>${a.labour_name}</strong></td>
+            <td>${a.work_type}</td>
+            <td>${a.in_time} - ${a.out_time}</td>
+            <td>${a.hours}h</td>
+            <td><strong style="color:#fd7e14;">${otHours}h</strong></td>
+            <td><strong style="color: #28a745;">₹${a.wage_per_day}</strong></td>
+            <td><strong style="color: #fd7e14;">₹${a.materials_cost.toFixed(2)}</strong></td>
+            <td><strong style="color: #667eea; font-size: 14px;">₹${a.total_payable.toFixed(2)}</strong></td>
+            <td><span class="status-${workflowStatus}">${workflowStatus.toUpperCase()}</span></td>
+            <td><span class="status-${paymentStatus}">${paymentStatus}</span></td>
+            <td>${actionButtons}</td>
+          </tr>
+        `;
+      }).join('');
+      console.log('✓ Table HTML updated, rows inserted:', tbody.children.length);
+    }
+
+    function showWorkDetails(idx) {
+      const record = attendanceData[idx] || {};
+      const work = record.work_details || {};
+      alert(`📋 WORK DETAILS\n\nDescription: ${work.description || '-'}\nLocation/Area: ${work.area || '-'}\nUnits Completed: ${work.units || '-'}\nRemarks: ${work.remarks || '-'}`);
+    }
+
+    function showMaterialDetails(idx) {
+      const record = attendanceData[idx] || {};
+      const materials = record.material_details || [];
+      let msg = '📦 MATERIAL DETAILS\n\n';
+      materials.forEach(m => {
+        msg += `${m.name || 'Item'}: ${m.qty || '-'} ${m.unit || ''} → ₹${m.cost || 0}\n`;
+      });
+      const totalCost = materials.reduce((sum, m) => sum + (m.cost || 0), 0);
+      msg += `\n💰 Total Material Cost: ₹${totalCost.toFixed(2)}`;
+      alert(msg);
+    }
+
+    async function submitForApproval(idx) {
+      const record = attendanceData[idx];
+      if (!record) return;
+      if (!confirm(`Submit attendance for ${record.labour_name} on ${record.date} for approval?`)) return;
+      try {
+        await api(`/attendance/${record.id}/submit`, { method: 'POST' });
+        record.workflow_status = 'submitted';
+        displayAttendance(attendanceData);
+      } catch (e) {
+        alert(`Error: ${e.message}`);
+      }
+    }
+
+    async function approveAttendance(idx) {
+      const record = attendanceData[idx];
+      if (!record) return;
+      if (!confirm(`Approve attendance for ${record.labour_name}?\n\nWage: ₹${record.wage_per_day}\nMaterial Cost: ₹${record.materials_cost}\nTotal: ₹${record.total_payable}`)) return;
+      try {
+        await api(`/attendance/${record.id}/approve`, { method: 'POST' });
+        record.workflow_status = 'approved';
+        record.payment_status = 'pending';
+        displayAttendance(attendanceData);
+      } catch (e) {
+        alert(`Error: ${e.message}`);
+      }
+    }
+
+    async function rejectAttendance(idx) {
+      const record = attendanceData[idx];
+      if (!record) return;
+      const reason = prompt('Rejection reason:');
+      if (!reason) return;
+      try {
+        await api(`/attendance/${record.id}/reject`, { method: 'POST', body: JSON.stringify({ remarks: reason }) });
+        record.workflow_status = 'rejected';
+        record.remarks = `Rejected: ${reason}`;
+        displayAttendance(attendanceData);
+      } catch (e) {
+        alert(`Error: ${e.message}`);
+      }
+    }
+
+    async function markAsPaid(idx) {
+      const record = attendanceData[idx];
+      if (!record) return;
+      const mode = prompt('Payment mode (cash/bank/upi):', 'cash');
+      if (!mode) return;
+      try {
+        await api(`/attendance/${record.id}/mark-paid`, { method: 'POST', body: JSON.stringify({ payment_mode: mode }) });
+        record.workflow_status = 'paid';
+        record.payment_status = 'paid';
+        displayAttendance(attendanceData);
+      } catch (e) {
+        alert(`Error: ${e.message}`);
+      }
+    }
+
+    function editAttendance(idx) {
+      alert('Edit attendance for: ' + attendanceData[idx].labour_name);
+    }
+
+    async function submitAttendance(e) {
+      e.preventDefault();
+      const materials = collectMaterials();
+      const materials_cost = materials.reduce((sum, m) => sum + (m.cost || 0), 0);
+      const attendancePayload = {
+        labour_id: (function() {
+          const opt = document.querySelector('#labourName option:checked');
+          return (opt && opt.dataset && opt.dataset.id) ? opt.dataset.id : 9999;
+        })(),
+        labour_name: document.getElementById('labourName').value,
+        project_id: 1,
+        attendance_date: document.getElementById('attendanceDate').value,
+        in_time: document.getElementById('inTime').value,
+        out_time: document.getElementById('outTime').value,
+        attendance_status: 'present',
+        wage_per_day: parseFloat(document.getElementById('wagePerDay').value) || 0,
+        work_details: {
+          description: document.getElementById('workDescription').value,
+          area: document.getElementById('workArea').value,
+          units: document.getElementById('workUnits').value,
+          remarks: document.getElementById('workRemarks').value
+        },
+        material_details: materials,
+        materials_cost
+      };
+
+      try {
+        await api('/attendance/mark', {
+          method: 'POST',
+          body: JSON.stringify(attendancePayload)
+        });
+        alert('Attendance saved');
+        closeMarkAttendanceModal();
+        await loadAttendance();
+      } catch (err) {
+        alert(`Save failed: ${err.message}`);
+      }
+    }
+
+    async function exportExcel() {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_URL}/export/attendance`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `attendance-${new Date().toISOString().slice(0,10)}.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (e) {
+        alert('Export failed: ' + e.message);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const wageInput = document.getElementById('wagePerDay');
+      if (wageInput) {
+        wageInput.addEventListener('change', calculateTotalCost);
+        wageInput.addEventListener('input', calculateTotalCost);
+      }
+      const dateInput = document.getElementById('attendanceDate');
+      if (dateInput) {
+        dateInput.valueAsDate = new Date();
+      }
+      initLabourDropdown();
+      loadAttendance();
+    });
+    
+    // Also try loading immediately in case DOMContentLoaded already fired
+    if (document.readyState === 'loading') {
+      console.log('DOM still loading, will wait for DOMContentLoaded');
+    } else {
+      console.log('DOM already loaded, loading attendance now');
+      loadAttendance();
+    }
+  </script>
+</body>
+</html>
