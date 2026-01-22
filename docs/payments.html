@@ -58,8 +58,8 @@
     <main class="crm-main">
       <header class="crm-header">
         <div class="header-title">
-          <h1>Wage & Payment Management</h1>
-          <span class="header-desc">Manage and track all wage and payment records</span>
+          <h1 style="font-size:2.8rem;font-weight:900;color:#764ba2;">Payments</h1>
+          <span class="header-desc" style="font-size:1.3rem;">Manage and track all wage and payment records</span>
         </div>
         <div class="header-user">
         <button class="btn btn-primary" onclick="openPaymentModal()"><i class="fas fa-plus"></i> Process Payment</button>
@@ -134,16 +134,8 @@
       <h2>Process Payment</h2>
       <form onsubmit="submitPayment(event)">
         <div class="form-group">
-          <label>Worker</label>
-          <select id="paymentWorkerId" required>
-            <option value="">Select Worker</option>
-            <option value="1">Ravi Kumar</option>
-            <option value="2">Suresh Babu</option>
-            <option value="3">Mohan Singh</option>
-            <option value="4">Prakash Reddy</option>
-            <option value="5">Vijay Kumar</option>
-            <option value="6">Ramesh Yadav</option>
-          </select>
+          <label>Worker Name</label>
+          <input type="text" id="paymentWorkerName" required placeholder="Enter worker name" style="font-size:1.3rem;font-weight:700;color:#764ba2;" />
         </div>
         <div class="form-group">
           <label>Period Start</label>
@@ -237,7 +229,7 @@
 
       tbody.innerHTML = data.map(p => `
         <tr>
-          <td>${p.worker}</td>
+          <td style="font-size:1.3rem;font-weight:700;color:#764ba2;">${p.worker}</td>
           <td>${p.period}</td>
           <td>${p.days}</td>
           <td>₹${p.wage}</td>

@@ -118,12 +118,11 @@ body {
   font-size: 1.15rem;
   font-weight: 700;
 }
+
 .feature-card p {
-  color: #666;
+  color: #6c757d;
   font-size: 0.98rem;
   line-height: 1.5;
-}
-  color: #6c757d;
 }
 
 .breadcrumb span {
