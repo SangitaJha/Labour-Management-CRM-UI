@@ -51,6 +51,44 @@
     .summary-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 13px; }
     .summary-total { font-weight: 700; font-size: 16px; }
     .view-details-btn { background: #17a2b8; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; }
+
+    /* Popup Modal Styles */
+    .popup-modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      align-items: center;
+      justify-content: center;
+    }
+    .popup-modal.active {
+      display: flex;
+    }
+    .popup-modal-content {
+      background: #fff;
+      padding: 30px 24px 18px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+      min-width: 280px;
+      max-width: 90vw;
+      text-align: center;
+      position: relative;
+    }
+    .popup-modal-close {
+      position: absolute;
+      top: 8px;
+      right: 14px;
+      font-size: 22px;
+      color: #888;
+      cursor: pointer;
+    }
+    .popup-modal-close:hover {
+      color: #222;
+    }
   </style>
 </head>
 
@@ -127,6 +165,14 @@
         <p>&copy; 2025 SVF Labour Management CRM. All rights reserved.</p>
       </footer>
     </main>
+  </div>
+
+  <!-- Popup Modal -->
+  <div class="popup-modal" id="popupModal">
+    <div class="popup-modal-content">
+      <span class="popup-modal-close" onclick="closePopupModal()">&times;</span>
+      <div id="popupModalMsg"></div>
+    </div>
   </div>
 
   <!-- Mark Attendance Modal -->
@@ -640,11 +686,11 @@
           method: 'POST',
           body: JSON.stringify(attendancePayload)
         });
-        alert('Attendance saved');
+        showPopup('Attendance saved');
         closeMarkAttendanceModal();
         await loadAttendance();
       } catch (err) {
-        alert(`Save failed: ${err.message}`);
+        showPopup(`Save failed: ${err.message}`);
       }
     }
 
@@ -662,7 +708,7 @@
         a.click();
         window.URL.revokeObjectURL(url);
       } catch (e) {
-        alert('Export failed: ' + e.message);
+        showPopup('Export failed: ' + e.message);
       }
     }
 
@@ -686,6 +732,19 @@
     } else {
       console.log('DOM already loaded, loading attendance now');
       loadAttendance();
+    }
+    // Popup Modal logic
+    function showPopup(msg) {
+      const modal = document.getElementById('popupModal');
+      const msgDiv = document.getElementById('popupModalMsg');
+      if (msgDiv) msgDiv.textContent = msg;
+      if (modal) modal.classList.add('active');
+      // Optional: auto-close after 2.5s
+      setTimeout(() => closePopupModal(), 2500);
+    }
+    function closePopupModal() {
+      const modal = document.getElementById('popupModal');
+      if (modal) modal.classList.remove('active');
     }
   </script>
 </body>
