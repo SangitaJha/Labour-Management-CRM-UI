@@ -515,7 +515,7 @@
           
           showAlert('alertBox', '✅ Login successful! Redirecting...', 'success');
           setTimeout(() => {
-            window.location.href = '/dashboard.html';
+            window.location.href = (window.location.protocol === 'file:') ? 'dashboard.html' : '/dashboard.html';
           }, 1500);
         } else {
           showAlert('alertBox', data.error || 'Login failed', 'error');
@@ -596,7 +596,7 @@
     window.addEventListener('load', () => {
       const token = localStorage.getItem('token');
       if (token) {
-        window.location.href = '/dashboard.html';
+        window.location.href = (window.location.protocol === 'file:') ? 'dashboard.html' : '/dashboard.html';
       }
     });
   </script>

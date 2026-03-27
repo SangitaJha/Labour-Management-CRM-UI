@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVF CRM - All Pages</title>
+  <script src="js/auth.js"></script>
+  <style>
+    :root {
+      --bg: #eef3f7;
+      --card: #ffffff;
+      --text: #1f2f3c;
+      --muted: #5f7284;
+      --line: #d7e1ea;
+      --accent: #0f6f5c;
+      --accent2: #0b4e73;
+      --radius: 12px;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at 10% 20%, #d7ebe5 0, transparent 28%),
+                  radial-gradient(circle at 90% 5%, #dbeaf6 0, transparent 24%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 12px;
+      min-height: 100vh;
+    }
+
+    .page-head {
+      grid-column: 1 / -1;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 10px;
+    }
+
+    .page-head-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: var(--accent2);
+    }
+
+    .quick-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .quick-links a {
+      text-decoration: none;
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: #fff;
+      font-size: 13px;
+    }
+
+    .quick-links a:hover,
+    .quick-links a.active {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+
+    .totals {
+      grid-column: 1 / -1;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 10px;
+    }
+
+    .totals-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .totals-title {
+      margin: 0;
+      font-size: 16px;
+      color: var(--accent2);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 8px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #f9fcff;
+      padding: 10px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .panel,
+    .viewer {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      min-height: 78vh;
+    }
+
+    .title {
+      margin: 0 0 6px;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .hint {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .input,
+    .btn,
+    .select {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 14px;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .input,
+    .select {
+      width: 100%;
+    }
+
+    .btn {
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      color: #fff;
+      min-height: 40px;
+    }
+
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      background: #f9fcff;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .links a {
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .links a:hover,
+    .links a.active {
+      border-color: #9fb9cc;
+      background: #eef7fc;
+    }
+
+    .filename {
+      color: var(--muted);
+      font-size: 12px;
+      word-break: break-all;
+      text-align: right;
+    }
+
+    .viewer {
+      min-height: 78vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .viewer-head {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .note {
+      margin: 10px 12px 0;
+      border: 1px solid #ecd48e;
+      border-radius: 10px;
+      background: #fff8de;
+      color: #6a5313;
+      padding: 9px;
+      font-size: 13px;
+      line-height: 1.4;
+      display: none;
+    }
+
+    .note.show {
+      display: block;
+    }
+
+    iframe {
+      width: 100%;
+      border: 0;
+      flex: 1;
+      min-height: 65vh;
+      background: #fff;
+    }
+
+    .mobile-tabs {
+      display: none;
+      width: 100%;
+      margin-bottom: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .mobile-tabs button {
+      width: 50%;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .mobile-tabs button.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        grid-template-columns: 1fr;
+        padding: 8px;
+      }
+
+      .page-head {
+        padding: 8px;
+      }
+
+      .quick-links {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+      }
+
+      .quick-links a {
+        white-space: nowrap;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+
+      .panel,
+      .viewer {
+        min-height: auto;
+      }
+
+      .mobile-tabs {
+        display: flex;
+      }
+
+      .page.mobile-viewer .panel {
+        display: none;
+      }
+
+      .page.mobile-list .viewer {
+        display: none;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      iframe {
+        min-height: 72vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="pageRoot" class="page">
+    <header class="page-head">
+      <h2 class="page-head-title">All Pages Connected</h2>
+      <nav id="quickLinks" class="quick-links">
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="attendance.html">Attendance</a>
+        <a href="payments.html">Payments</a>
+      </nav>
+    </header>
+
+    <section class="totals">
+      <div class="totals-head">
+        <h2 class="totals-title">All Attendance Values Added Together</h2>
+        <button id="refreshTotals" type="button" class="btn" style="max-width:260px;">Refresh Totals</button>
+      </div>
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-label">Records</div>
+          <div id="statRecords" class="stat-value">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Total Wage</div>
+          <div id="statWage" class="stat-value">0.00</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Total Materials</div>
+          <div id="statMaterials" class="stat-value">0.00</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Total Payable</div>
+          <div id="statPayable" class="stat-value">0.00</div>
+        </div>
+      </div>
+      <p id="totalsStatus" class="hint" style="margin-top:10px;">Loading combined totals...</p>
+    </section>
+
+    <section class="panel">
+      <h1 class="title">SVF CRM - All Pages</h1>
+      <p class="hint">Tap any page to open it directly. Preview is only for checking inside this page.</p>
+
+      <div class="controls">
+        <div class="mobile-tabs">
+          <button id="tabList" class="active" type="button">Pages</button>
+          <button id="tabViewer" type="button">Viewer</button>
+        </div>
+
+        <input id="search" class="input" type="text" placeholder="Search page name..." />
+
+        <div class="row">
+          <label class="toggle">
+            <input id="previewToggle" type="checkbox" />
+            Preview inside this page
+          </label>
+        </div>
+
+        <div class="row">
+          <select id="pageSelect" class="select"></select>
+        </div>
+
+        <div class="row">
+          <button id="openBtn" type="button" class="btn">Open Selected Page</button>
+        </div>
+      </div>
+
+      <div id="pageLinks" class="links">
+        <a href="index.html"><span>Home</span><span class="filename">index.html</span></a>
+        <a href="dashboard.html"><span>Dashboard</span><span class="filename">dashboard.html</span></a>
+        <a href="attendance.html"><span>Attendance</span><span class="filename">attendance.html</span></a>
+        <a href="attendance-format.html"><span>Attendance Format</span><span class="filename">attendance-format.html</span></a>
+        <a href="payments.html"><span>Payments</span><span class="filename">payments.html</span></a>
+        <a href="workers.html"><span>Workers</span><span class="filename">workers.html</span></a>
+        <a href="projects.html"><span>Projects</span><span class="filename">projects.html</span></a>
+        <a href="project-cost.html"><span>Project Cost</span><span class="filename">project-cost.html</span></a>
+        <a href="sites.html"><span>Sites</span><span class="filename">sites.html</span></a>
+        <a href="contractors.html"><span>Contractors</span><span class="filename">contractors.html</span></a>
+        <a href="reports.html"><span>Reports</span><span class="filename">reports.html</span></a>
+        <a href="settings.html"><span>Settings</span><span class="filename">settings.html</span></a>
+        <a href="profile.html"><span>Profile</span><span class="filename">profile.html</span></a>
+        <a href="login.html"><span>Login</span><span class="filename">login.html</span></a>
+        <a href="dashboard-calc.html"><span>Dashboard Calc</span><span class="filename">dashboard-calc.html</span></a>
+        <a href="test-backend.html"><span>Backend Test</span><span class="filename">test-backend.html</span></a>
+        <a href="svf home lmt 1.html"><span>SVF Home 1</span><span class="filename">svf home lmt 1.html</span></a>
+        <a href="SVF home lmt 2.html"><span>SVF Home 2</span><span class="filename">SVF home lmt 2.html</span></a>
+        <a href="SVF homes lmt 3.html"><span>SVF Home 3</span><span class="filename">SVF homes lmt 3.html</span></a>
+      </div>
+    </section>
+
+    <section class="viewer">
+      <div class="viewer-head">
+        <span>Preview (optional)</span>
+        <span id="currentPath">dashboard.html</span>
+      </div>
+      <div id="note" class="note">
+        Mobile file mode can block iframe previews. Keep preview OFF and use direct links for stable opening.
+      </div>
+      <iframe id="frame" src="dashboard.html" title="Page preview"></iframe>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      var pages = [
+        { name: "Home", file: "index.html" },
+        { name: "Dashboard", file: "dashboard.html" },
+        { name: "Attendance", file: "attendance.html" },
+        { name: "Attendance Format", file: "attendance-format.html" },
+        { name: "Payments", file: "payments.html" },
+        { name: "Workers", file: "workers.html" },
+        { name: "Projects", file: "projects.html" },
+        { name: "Project Cost", file: "project-cost.html" },
+        { name: "Sites", file: "sites.html" },
+        { name: "Contractors", file: "contractors.html" },
+        { name: "Reports", file: "reports.html" },
+        { name: "Settings", file: "settings.html" },
+        { name: "Profile", file: "profile.html" },
+        { name: "Login", file: "login.html" },
+        { name: "Dashboard Calc", file: "dashboard-calc.html" },
+        { name: "Backend Test", file: "test-backend.html" },
+        { name: "SVF Home 1", file: "svf home lmt 1.html" },
+        { name: "SVF Home 2", file: "SVF home lmt 2.html" },
+        { name: "SVF Home 3", file: "SVF homes lmt 3.html" }
+      ];
+
+      var root = document.getElementById("pageRoot");
+      var quickLinks = document.getElementById("quickLinks");
+      var linksWrap = document.getElementById("pageLinks");
+      var select = document.getElementById("pageSelect");
+      var search = document.getElementById("search");
+      var openBtn = document.getElementById("openBtn");
+      var refreshTotalsBtn = document.getElementById("refreshTotals");
+      var statRecords = document.getElementById("statRecords");
+      var statWage = document.getElementById("statWage");
+      var statMaterials = document.getElementById("statMaterials");
+      var statPayable = document.getElementById("statPayable");
+      var totalsStatus = document.getElementById("totalsStatus");
+      var previewToggle = document.getElementById("previewToggle");
+      var frame = document.getElementById("frame");
+      var currentPath = document.getElementById("currentPath");
+      var note = document.getElementById("note");
+      var tabList = document.getElementById("tabList");
+      var tabViewer = document.getElementById("tabViewer");
+
+      var active = "dashboard.html";
+
+      function isSmall() {
+        return window.matchMedia && window.matchMedia("(max-width: 980px)").matches;
+      }
+
+      function isMobileLike() {
+        return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
+      }
+
+      function safeUrl(file) {
+        return encodeURI(file);
+      }
+
+      function formatMoney(n) {
+        return (Number(n) || 0).toFixed(2);
+      }
+
+      function parseRows(raw) {
+        if (Array.isArray(raw)) return raw;
+        if (raw && Array.isArray(raw.data)) return raw.data;
+        return [];
+      }
+
+      function sumAttendance(rows) {
+        var totalWage = 0;
+        var totalMaterials = 0;
+        var totalPayable = 0;
+        for (var i = 0; i < rows.length; i += 1) {
+          var r = rows[i] || {};
+          var wage = Number(r.wage_per_day || r.wage || 0) || 0;
+          var materials = Number(r.materials_cost || 0) || 0;
+          var payable = Number(r.total_payable || (wage + materials)) || 0;
+          totalWage += wage;
+          totalMaterials += materials;
+          totalPayable += payable;
+        }
+        return {
+          count: rows.length,
+          wage: totalWage,
+          materials: totalMaterials,
+          payable: totalPayable
+        };
+      }
+
+      async function loadCombinedTotals() {
+        var apiBase = (typeof API_URL !== "undefined" && API_URL) ? API_URL : "http://localhost:3000/api";
+        var token = localStorage.getItem("token");
+        totalsStatus.textContent = "Loading combined totals...";
+        try {
+          var response = await fetch(apiBase + "/attendance", {
+            headers: token ? { Authorization: "Bearer " + token } : {}
+          });
+          var payload = await response.json().catch(function () { return {}; });
+          var rows = parseRows(payload);
+          var totals = sumAttendance(rows);
+          statRecords.textContent = String(totals.count);
+          statWage.textContent = formatMoney(totals.wage);
+          statMaterials.textContent = formatMoney(totals.materials);
+          statPayable.textContent = formatMoney(totals.payable);
+          totalsStatus.textContent = "Totals updated successfully.";
+        } catch (err) {
+          statRecords.textContent = "0";
+          statWage.textContent = "0.00";
+          statMaterials.textContent = "0.00";
+          statPayable.textContent = "0.00";
+          totalsStatus.textContent = "Could not load API totals. Start backend and open via http URL.";
+        }
+      }
+
+      function setMobileTab(which) {
+        if (!isSmall()) {
+          root.classList.remove("mobile-list");
+          root.classList.remove("mobile-viewer");
+          return;
+        }
+        if (which === "viewer") {
+          root.classList.add("mobile-viewer");
+          root.classList.remove("mobile-list");
+          tabViewer.classList.add("active");
+          tabList.classList.remove("active");
+          return;
+        }
+        root.classList.add("mobile-list");
+        root.classList.remove("mobile-viewer");
+        tabList.classList.add("active");
+        tabViewer.classList.remove("active");
+      }
+
+      function setPreviewEnabled(enabled) {
+        previewToggle.checked = !!enabled;
+        frame.style.display = enabled ? "block" : "none";
+        note.classList.toggle("show", !enabled || (window.location.protocol === "file:" && isMobileLike()));
+      }
+
+      function selectFile(file) {
+        active = file;
+        currentPath.textContent = file;
+        select.value = file;
+
+        var topAnchors = quickLinks.querySelectorAll("a");
+        for (var j = 0; j < topAnchors.length; j += 1) {
+          topAnchors[j].classList.toggle("active", topAnchors[j].getAttribute("href") === file);
+        }
+
+        var anchors = linksWrap.querySelectorAll("a");
+        for (var i = 0; i < anchors.length; i += 1) {
+          anchors[i].classList.toggle("active", anchors[i].getAttribute("href") === file);
+        }
+
+        if (previewToggle.checked) {
+          frame.src = safeUrl(file);
+        }
+      }
+
+      function openFile(file) {
+        window.location.assign(safeUrl(file));
+      }
+
+      function renderSelect() {
+        var html = "";
+        for (var i = 0; i < pages.length; i += 1) {
+          html += '<option value="' + pages[i].file + '">' + pages[i].name + ' (' + pages[i].file + ')</option>';
+        }
+        select.innerHTML = html;
+      }
+
+      function renderQuickLinks() {
+        var html = "";
+        for (var i = 0; i < pages.length; i += 1) {
+          html += '<a href="' + pages[i].file + '">' + pages[i].name + '</a>';
+        }
+        quickLinks.innerHTML = html;
+      }
+
+      function wireLinks() {
+        var anchors = linksWrap.querySelectorAll("a");
+        for (var i = 0; i < anchors.length; i += 1) {
+          anchors[i].addEventListener("click", function () {
+            var href = this.getAttribute("href");
+            selectFile(href);
+          });
+        }
+
+        var topAnchors = quickLinks.querySelectorAll("a");
+        for (var j = 0; j < topAnchors.length; j += 1) {
+          topAnchors[j].addEventListener("click", function () {
+            var href = this.getAttribute("href");
+            selectFile(href);
+          });
+        }
+      }
+
+      function applySearch() {
+        var q = (search.value || "").toLowerCase();
+        var anchors = linksWrap.querySelectorAll("a");
+        for (var i = 0; i < anchors.length; i += 1) {
+          var t = anchors[i].textContent.toLowerCase();
+          anchors[i].style.display = t.indexOf(q) !== -1 ? "flex" : "none";
+        }
+      }
+
+      search.addEventListener("input", applySearch);
+      select.addEventListener("change", function () { selectFile(this.value); });
+      openBtn.addEventListener("click", function () { openFile(select.value); });
+      refreshTotalsBtn.addEventListener("click", loadCombinedTotals);
+      previewToggle.addEventListener("change", function () {
+        setPreviewEnabled(this.checked);
+        selectFile(active);
+      });
+      tabList.addEventListener("click", function () { setMobileTab("list"); });
+      tabViewer.addEventListener("click", function () { setMobileTab("viewer"); });
+      window.addEventListener("resize", function () {
+        if (isSmall()) {
+          if (!root.classList.contains("mobile-viewer") && !root.classList.contains("mobile-list")) {
+            setMobileTab("list");
+          }
+          return;
+        }
+        setMobileTab("viewer");
+      });
+
+      renderSelect();
+      renderQuickLinks();
+      wireLinks();
+
+      if (window.location.protocol === "file:" && isMobileLike()) {
+        setPreviewEnabled(false);
+      } else {
+        setPreviewEnabled(true);
+      }
+
+      setMobileTab(isSmall() ? "list" : "viewer");
+      selectFile(active);
+      loadCombinedTotals();
+    })();
+  </script>
+</body>
+</html>
